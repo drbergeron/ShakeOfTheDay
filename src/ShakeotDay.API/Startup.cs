@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using ShakeotDay.Core.Models;
 
 namespace ShakeotDay.API
 {
@@ -29,6 +30,8 @@ namespace ShakeotDay.API
         {
             // Add framework services.
             services.AddMvc();
+
+            services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

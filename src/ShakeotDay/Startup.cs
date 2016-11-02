@@ -13,6 +13,7 @@ using Microsoft.Extensions.Options;
 using ShakeotDay.Data;
 using ShakeotDay.Models;
 using ShakeotDay.Services;
+using ShakeotDay.Core.Models;
 
 namespace ShakeotDay
 {

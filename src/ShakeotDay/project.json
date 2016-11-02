@@ -44,7 +44,8 @@
       "version": "1.0.0-preview2-final",
       "type": "build"
     },
-    "Dapper": "1.50.2"
+    "Dapper": "1.50.2",
+    "ShakeotDay.Core": "1.0.0-*"
   },
 
   "tools": {
