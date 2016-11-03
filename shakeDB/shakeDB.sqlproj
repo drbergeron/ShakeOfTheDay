@@ -60,6 +60,7 @@
   <ItemGroup>
     <Folder Include="Properties" />
     <Folder Include="Tables\" />
+    <Folder Include="Tables\Game" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\__EFMigrationsHistory.sql" />
@@ -70,5 +71,6 @@
     <Build Include="Tables\AspNetUserClaims.sql" />
     <Build Include="Tables\AspNetUserLogins.sql" />
     <Build Include="Tables\AspNetUserRoles.sql" />
+    <Build Include="Tables\Game\DiceRoll.sql" />
   </ItemGroup>
 </Project>
