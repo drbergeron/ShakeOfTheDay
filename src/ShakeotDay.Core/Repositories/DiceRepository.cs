@@ -38,17 +38,17 @@ namespace ShakeotDay.Core.Repositories
 
         public async Task<int> SaveRoll(Dice dieIn, long userIn)
         {
-            var o = new
+            var dr = new DiceRoll
             {
-                user = userIn,
-                roll = dieIn.value
+                UserId = userIn,
+                RollValue = dieIn.value
             };
 
             var SQL = $@"
                 insert into DieRolls(UserId,RollValue)
-                Values(@user,@roll)
+                Values(@UserId,@RollValue)
                 ";
-            return await _conn.ExecuteAsync(SQL, o);
+            return await _conn.ExecuteAsync(SQL, dr);
         }
     }
 }
