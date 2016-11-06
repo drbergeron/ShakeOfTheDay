@@ -8,9 +8,25 @@ namespace ShakeotDay.Core.Models
     {
         private Random roll;
         private int _value;
+
+        /// <summary>
+        /// Can be used to create dice one off, should not be used inside of a loop due to random Seed issues.
+        /// </summary>
        public Dice()
         {
             roll = new Random();
+            value = 0;
+        }
+
+        /// <summary>
+        /// Use this method if creating multiple dice at once, create random number generator outside of this class and pass it in.
+        /// 
+        /// Will result and more evenly distributed dice rolls.
+        /// </summary>
+        /// <param name="rnd"></param>
+        public Dice(Random rnd)
+        {
+            roll = rnd;
             value = 0;
         }
 

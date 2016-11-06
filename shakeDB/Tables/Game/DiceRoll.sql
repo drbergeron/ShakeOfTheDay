@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[DieRolls]
 (
-	[Id] INT NOT NULL PRIMARY KEY, 
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
     [UserId] BIGINT NOT NULL, 
     [RollValue] NCHAR(10) NOT NULL DEFAULT -1, 
     [CreatedDate] DATETIME NOT NULL DEFAULT GetDate(), 

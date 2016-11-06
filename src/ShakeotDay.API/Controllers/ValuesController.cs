@@ -34,9 +34,12 @@ namespace ShakeotDay.API.Controllers
         }
 
         // POST api/values
-        [HttpPost]
-        public void Post([FromBody]string value)
+        [HttpGet("dice/test")]
+        public IActionResult get5Dice()
         {
+            var newDice = _repo.GetDice(1); //creating dice for that user
+            if (newDice.Count != 5) return NoContent();
+            return Ok(newDice);
         }
 
         // PUT api/values/5

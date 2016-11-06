@@ -23,14 +23,16 @@ namespace ShakeotDay.Core.Repositories
         {
             var diceOut = new List<Dice>();
             var saves = new List<Task<int>>();
+            var RNG = new Random();
 
             for(int i = 0; i < numberIn; ++i)
             {
-                var die = new Dice();
+                var die = new Dice(RNG);
                 die.Roll();
                 diceOut.Add(die);
 
-                saves.Add(SaveRoll(die, userId));
+                var t = SaveRoll(die, userId);
+                t.Wait();
             }
 
             return diceOut;
@@ -48,6 +50,7 @@ namespace ShakeotDay.Core.Repositories
                 insert into DieRolls(UserId,RollValue)
                 Values(@UserId,@RollValue)
                 ";
+
             return await _conn.ExecuteAsync(SQL, dr);
         }
     }
