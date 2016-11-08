@@ -1,9 +1,12 @@
 ﻿CREATE TABLE [dbo].[Games]
 (
-	[Id] INT NOT NULL PRIMARY KEY, 
+	[Id] BIGINT NOT NULL PRIMARY KEY IDENTITY, 
     [TypeId] INT NOT NULL, 
-    [UserId] NCHAR(10) NOT NULL, 
+    [UserId] BIGINT NOT NULL, 
     [Year] INT NOT NULL, 
     [Day] INT NOT NULL, 
-    [isClosed] BIT NOT NULL DEFAULT 0
+	[RollsTaken] int not null default 0,
+    [isClosed] BIT NOT NULL DEFAULT 0, 
+    CONSTRAINT [FK_Games_Users_ID] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers]([FriendlyUserId]), 
+    CONSTRAINT [FK_Games_GameType_Id] FOREIGN KEY ([TypeId]) REFERENCES [GameTypes]([Id])
 )

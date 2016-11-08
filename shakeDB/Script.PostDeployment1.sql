@@ -9,5 +9,5 @@ Post-Deployment Script Template
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
-insert into GameTypes(Id,Name)
+insert into GameTypes(Id,Name,MaxPlaysPerDay)
 Values(0,'Shake of The Day Classic',1)

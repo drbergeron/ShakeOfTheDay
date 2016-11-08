@@ -13,10 +13,11 @@ namespace ShakeotDay.Core.Models
     public class Game
     {
         public long Id { get; set; }
-        public GameTypeEnum Type { get; set; }
+        public GameTypeEnum TypeId { get; set; }
         public long UserId { get; set; }
         public int Year { get; set; }
         public int Day { get; set; }
+        public int RollsTaken { get; set; }
         public bool isClosed { get; set; }
     }
 }
