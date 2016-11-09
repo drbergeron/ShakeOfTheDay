@@ -19,5 +19,8 @@ namespace ShakeotDay.Core.Models
         public int Day { get; set; }
         public int RollsTaken { get; set; }
         public bool isClosed { get; set; }
+        public bool isWinningGame { get; set; }
+        public int winAmount { get; set; }
+        public int AppliedToAccount { get; set; }
     }
 }

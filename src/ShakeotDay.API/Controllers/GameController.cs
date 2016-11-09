@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using ShakeotDay.Core.Models;
 using Microsoft.Extensions.Options;
 using ShakeotDay.Core.Repositories;
+using System.Net;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -30,28 +31,38 @@ namespace ShakeotDay.API.Controllers
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public IActionResult Get(int id)
         {
-            return "value";
+            var getgameTask = _repo.GetGameById(id);
+            getgameTask.Wait();
+            var gameObj = getgameTask.Result;
+
+            return Ok(gameObj);
         }
 
         // POST api/values
-        [HttpPost("Game/{GameType}/new/{UserId}")]
+        [HttpPost("{GameType}/new/{UserId}")]
         public IActionResult NewGame(long UserId, GameTypeEnum GameType)
         {
+
+            var cntTask = _repo.UserGamesPlayedToday(UserId);
+            var cnt = cntTask.Result;
+            if (cnt != 0) return new BadRequestObjectResult(new ShakeException(ShakeError.AlreadyPlayedToday, "You have already played a game today."));
+
+
             var gameTask = _repo.NewGame(UserId, GameType);
             gameTask.Wait();
             var gameId = gameTask.Result.Single();
 
             var getgameTask = _repo.GetGameById(gameId);
             getgameTask.Wait();
-            var gameObj = getgameTask.Result.Single();
+            var gameObj = getgameTask.Result;
 
             return Ok(gameObj);
         }
 
         // PUT api/values/5
-        [HttpPut("{id}")]
+        [HttpPut("{id}/Roll")]
         public void Put(int id, [FromBody]string value)
         {
         }

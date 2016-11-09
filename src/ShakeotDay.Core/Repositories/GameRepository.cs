@@ -36,13 +36,22 @@ namespace ShakeotDay.Core.Repositories
             return await _conn.QueryAsync<long>(insSql, obj);
         }
 
-        public async Task<IEnumerable<Game>> GetGameById(long Id)
+        public async Task<Game> GetGameById(long Id)
         {
             var sql = $@"Select Id, TypeId, UserId, Year, Day, RollsTaken, isClosed
                         From Games
                         where Id = @id";
 
-            return await _conn.QueryAsync<Game>(sql, new { id = Id });
+            return await _conn.QueryFirstAsync<Game>(sql, new { id = Id });
+        }
+
+        public async Task<int> UserGamesPlayedToday(long userId)
+        {
+            var sql = @"
+                    Select count(1) from Games g
+                    where g.UserId = @UserId and g.Year = @Year and g.Day = @Day";
+
+            return await _conn.QueryFirstAsync<int>(sql, new { UserId = userId, Year = DateTime.Now.Year, Day = DateTime.Now.DayOfYear });
         }
 
     }
