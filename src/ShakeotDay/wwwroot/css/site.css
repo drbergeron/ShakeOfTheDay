@@ -48,3 +48,14 @@ textarea {
     display: none
   }
 }
+
+.gamesIndexWrapper{
+    width:75%;
+    float: left;
+    border: solid black 1pt;
+}
+
+footer{
+    clear:both;
+    width:100%;
+}

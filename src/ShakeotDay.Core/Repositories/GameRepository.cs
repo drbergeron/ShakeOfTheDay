@@ -38,7 +38,7 @@ namespace ShakeotDay.Core.Repositories
 
         public async Task<Game> GetGameById(long Id)
         {
-            var sql = $@"Select Id, TypeId, UserId, Year, Day, RollsTaken, isClosed
+            var sql = $@"Select Id, TypeId, UserId, Year, Day, RollsTaken, isClosed, isWinningGame, winAmount, AppliedToAccount
                         From Games
                         where Id = @id";
 
@@ -52,6 +52,17 @@ namespace ShakeotDay.Core.Repositories
                     where g.UserId = @UserId and g.Year = @Year and g.Day = @Day";
 
             return await _conn.QueryFirstAsync<int>(sql, new { UserId = userId, Year = DateTime.Now.Year, Day = DateTime.Now.DayOfYear });
+        }
+
+        public async Task<IEnumerable<Game>> GetManyGames(long userId, int limitResultsBy = 7)
+        {
+            var sql = $@"
+                    Select top {limitResultsBy} *
+                    from Games
+                    where UserId = @User
+                ";
+
+            return await _conn.QueryAsync<Game>(sql, new { User = userId });
         }
 
     }

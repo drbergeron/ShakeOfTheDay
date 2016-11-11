@@ -1,0 +1,28 @@
+﻿@model IEnumerable<ShakeotDay.Core.Models.Game>
+@{
+    
+}
+
+<h3>Recent Games</h3>
+
+<div class="gamesIndexWrapper">
+    <table>
+        <thead>
+            <tr>
+                <th>Game ID</th>
+                <td>Date Played</td>
+                <td>Result</td>
+            </tr>
+        </thead>
+        @foreach(var game in Model)
+        {
+            
+            <tr>
+                <td>@game.Id</td>
+                <td>@game.Year / @game.Day</td>
+                <td>@game.isWinningGame</td>
+            </tr>
+
+        }
+    </table>
+</div>

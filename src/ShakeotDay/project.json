@@ -45,7 +45,8 @@
       "type": "build"
     },
     "Dapper": "1.50.2",
-    "ShakeotDay.Core": "1.0.0-*"
+    "ShakeotDay.Core": "1.0.0-*",
+    "ShakeotDay.API": "1.0.0-*"
   },
 
   "tools": {

@@ -22,16 +22,26 @@ namespace ShakeotDay.API.Controllers
             _repo = new GameRepository(connIn.Value.DefaultConnection);
         }
 
-        // GET: api/values
-        [HttpGet]
-        public IEnumerable<string> Get()
+        public GameController(string connStringIn)
         {
-            return new string[] { "value1", "value2" };
+            _repo = new GameRepository(connStringIn);
+        }
+
+        // GET: api/values
+        [HttpGet("default/{id}")]
+        public IActionResult GetDefaultGames(long id)
+        {
+            var getGamesTask = _repo.GetManyGames(id);
+            var Games = getGamesTask.Result;
+            if (Games.Count() == 0)
+                return new EmptyResult();
+            else
+                return Ok(Games);
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public IActionResult GetSingleGame(int id)
         {
             var getgameTask = _repo.GetGameById(id);
             getgameTask.Wait();
@@ -42,7 +52,7 @@ namespace ShakeotDay.API.Controllers
 
         // POST api/values
         [HttpPost("{GameType}/new/{UserId}")]
-        public IActionResult NewGame(long UserId, GameTypeEnum GameType)
+        public IActionResult CreateNewGame(long UserId, GameTypeEnum GameType)
         {
 
             var cntTask = _repo.UserGamesPlayedToday(UserId);
@@ -61,16 +71,5 @@ namespace ShakeotDay.API.Controllers
             return Ok(gameObj);
         }
 
-        // PUT api/values/5
-        [HttpPut("{id}/Roll")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
     }
 }

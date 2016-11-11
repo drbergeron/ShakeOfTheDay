@@ -14,6 +14,7 @@ using ShakeotDay.Data;
 using ShakeotDay.Models;
 using ShakeotDay.Services;
 using ShakeotDay.Core.Models;
+using Newtonsoft.Json.Serialization;
 
 namespace ShakeotDay
 {
@@ -49,7 +50,15 @@ namespace ShakeotDay
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddMvc();
+            services.AddMvc().AddJsonOptions(options => {
+                // handle loops correctly
+                options.SerializerSettings.ReferenceLoopHandling =
+                    Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+
+                // use standard name conversion of properties
+                options.SerializerSettings.ContractResolver =
+                    new CamelCasePropertyNamesContractResolver();
+            }); ;
 
             services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
 
