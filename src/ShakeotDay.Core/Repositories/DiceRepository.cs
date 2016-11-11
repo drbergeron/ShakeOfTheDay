@@ -19,7 +19,7 @@ namespace ShakeotDay.Core.Repositories
             _conn = new SqlConnection(_connstr);
         }
 
-        public List<Dice> GetDice(long userId, int numberIn = 5)
+        public async Task<List<Dice>> GetNewDice(long userId, long gameId, int rollNumber, int numberIn = 5)
         {
             var diceOut = new List<Dice>();
             var saves = new List<Task<int>>();
@@ -31,27 +31,55 @@ namespace ShakeotDay.Core.Repositories
                 die.Roll();
                 diceOut.Add(die);
 
-                var t = SaveRoll(die, userId);
-                t.Wait();
+                var t = await SaveRoll(die, userId, gameId, rollNumber);
             }
 
             return diceOut;
         }
 
-        public async Task<int> SaveRoll(Dice dieIn, long userIn)
+        public async Task<int> GetNextRollNumberForGame(long gameId)
         {
-            var dr = new DiceRoll
+            var sql =
+                @"
+                    select max(GameRollNumber)
+                    from DiceRoll
+                    where GameID = @GameId
+                ";
+
+            return await _conn.QueryFirstAsync<int>(sql, new { GameId = gameId });
+        }
+
+        public async Task<int> SaveRoll(Dice dieIn, long userIn, long gameIn, int rollNumber)
+        {
+            var dr = new 
             {
                 UserId = userIn,
-                RollValue = dieIn.value
+                RollValue = dieIn.value,
+                GameId = gameIn,
+                RollNum = rollNumber
             };
 
             var SQL = $@"
-                insert into DieRolls(UserId,RollValue)
-                Values(@UserId,@RollValue)
+                insert into DieRolls(UserId, RollValue, GameId, GameRollNumber)
+                Values(@UserId, @RollValue, @GameId, @RollNum)
                 ";
 
             return await _conn.ExecuteAsync(SQL, dr);
+        }
+
+        public async Task<DiceHand> GetHandForGame(long gameId, int rollToGet)
+        {
+            var sql = @"select RollValue from DiceRoll where GameId = @Gameid and GameRollNumber = @Roll";
+
+            var diceEnum = await _conn.QueryAsync<Dice>(sql, new { Gameid = gameId, Roll = rollToGet });
+            var dice = diceEnum.ToList();
+            if(dice.Count != 5)
+            {
+                throw new Exception($"Wrong Number of dice returned from game {gameId} and roll {rollToGet}; expected 5, got {dice.Count}");
+            }else
+            {
+                return new DiceHand(dice);
+            }
         }
     }
 }

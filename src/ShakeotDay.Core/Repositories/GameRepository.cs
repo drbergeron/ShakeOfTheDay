@@ -42,7 +42,7 @@ namespace ShakeotDay.Core.Repositories
                         From Games
                         where Id = @id";
 
-            return await _conn.QueryFirstAsync<Game>(sql, new { id = Id });
+            return await _conn.QueryFirstOrDefaultAsync<Game>(sql, new { id = Id });
         }
 
         public async Task<int> UserGamesPlayedToday(long userId)
@@ -65,5 +65,39 @@ namespace ShakeotDay.Core.Repositories
             return await _conn.QueryAsync<Game>(sql, new { User = userId });
         }
 
+        public async Task<int> CloseGame(long gameId, GameWinType winType)
+        {
+            var sql = @"
+                    update Games
+                    set isClosed = 1, isWinningGame = @winType
+                    where Id = @Id
+                ";
+
+            return await _conn.ExecuteAsync(sql, new { Id = gameId, winType = winType });
+        }
+
+
+        public async Task<GameType> GetGameType(GameTypeEnum typeIn)
+        {
+            var sql = @"select Id, Name, RollsPerGame, MaxPlaysPerDay From GameTypes where Id = @typeId";
+
+            return await _conn.QueryFirstOrDefaultAsync<GameType>(sql, new { typeId = (int)typeIn });
+        }
+
+        public Task<GameType> GetGameType(Game gameIn)
+        {
+            return this.GetGameType(gameIn.TypeId);
+        }
+
+        public async Task<int> UpdateGameRollsTaken(long gameId, int rolls)
+        {
+            var sql = @"
+                update Games
+                set RollsTaken = @newRolls
+                where Id = @GameId
+                ";
+
+            return await _conn.ExecuteAsync(sql, new { newRolls = rolls, GameId = gameId });
+        }
     }
 }

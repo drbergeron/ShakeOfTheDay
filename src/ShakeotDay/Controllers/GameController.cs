@@ -14,24 +14,28 @@ namespace ShakeotDay.Controllers
     public class GameController : Controller
     {
         // GET: Game
-        private string _connstring;
+        private IOptions<ConnectionStrings> _conn;
 
         public GameController(IOptions<ConnectionStrings> optIn)
         {
-            _connstring = optIn.Value.DefaultConnection;
+            _conn = optIn;
         }
-
+        
         public IActionResult Index()
         {
             long id = 1;
-            var con = new API.Controllers.GameController(_connstring);
-            var resp = (ObjectResult)con.GetDefaultGames(id);
+            var con = new API.Controllers.GameController(_conn);
+            var respAct = con.GetDefaultGames(id);
+            //if the response was noContent (no games), then create an empty ObjectResult, else cast returned fame as ObjectResult
+            var resp = (ObjectResult)(respAct.GetType() == typeof(NoContentResult) ? new ObjectResult(new List<Game>()) : respAct);
             return View(resp.Value);
         }
-
+        
         // GET: Game/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details(long id)
         {
+            var api = new API.Controllers.GameController(_conn);
+            api.GetSingleGame(id);
             return View();
         }
 

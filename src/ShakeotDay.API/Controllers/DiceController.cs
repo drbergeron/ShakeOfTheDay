@@ -3,23 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using ShakeotDay.Core.Repositories;
 using ShakeotDay.Core.Models;
 using Microsoft.Extensions.Options;
-using ShakeotDay.Core.Repositories;
+// For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace ShakeotDay.API.Controllers
 {
     [Route("api/[controller]")]
-    public class ValuesController : Controller
+    public class DiceController : Controller
     {
-        private readonly DiceRepository _repo;
 
-        public ValuesController(IOptions<ConnectionStrings> conn)
+        private DiceRepository _repo;
+        //this will likely never be used as a controller, and will instead be in the game engine repo.
+        //
+        public DiceController(IOptions<ConnectionStrings> connIn)
         {
-            _repo = new DiceRepository(conn.Value.DefaultConnection);
+            _repo = new DiceRepository(connIn.Value.DefaultConnection);
         }
 
-        // GET api/values
+      
+        // GET: api/values
         [HttpGet]
         public IEnumerable<string> Get()
         {
@@ -34,12 +38,6 @@ namespace ShakeotDay.API.Controllers
         }
 
         
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
         // DELETE api/values/5
         [HttpDelete("{id}")]
         public void Delete(int id)

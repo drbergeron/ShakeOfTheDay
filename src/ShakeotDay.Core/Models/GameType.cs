@@ -9,6 +9,7 @@ namespace ShakeotDay.Core.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public int RollsPerGame { get; set; }
         public int MaxPlaysPerDay { get; set; }
     }
 }
