@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using ShakeotDay.Models;
-using ShakeotDay.Models.ManageViewModels;
-using ShakeotDay.Services;
+using ShakeotDay.Web.Models;
+using ShakeotDay.Web.Models.ManageViewModels;
+using ShakeotDay.Web.Services;
 
 namespace ShakeotDay.Controllers
 {

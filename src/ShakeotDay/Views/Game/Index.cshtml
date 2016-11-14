@@ -1,4 +1,6 @@
-﻿@model IEnumerable<ShakeotDay.Core.Models.Game>
+﻿@using Microsoft.AspNetCore.Http
+
+@model IEnumerable<ShakeotDay.Core.Models.Game>
 @{
     
 }
@@ -6,7 +8,7 @@
 <h3>Recent Games</h3>
 
 <div class="gamesIndexWrapper">
-    <table>
+    <table class="games" id="games">
         <thead>
             <tr>
                 <th>Game ID</th>
@@ -17,12 +19,20 @@
         @foreach(var game in Model)
         {
             
-            <tr>
+            <tr data-gameid="@game.Id">
                 <td>@game.Id</td>
                 <td>@game.Year / @game.Day</td>
                 <td>@game.isWinningGame</td>
+                <td> <button type="button" class="btn btn-link" id="Game_@game.Id">Details</button></td>
             </tr>
 
         }
+
     </table>
 </div>
+
+<script>
+    $(document).ready(function () {
+        $('#games').DataTable();
+    });
+</script>
