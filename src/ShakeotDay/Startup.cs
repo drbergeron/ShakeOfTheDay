@@ -4,17 +4,18 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using ShakeotDay.Data;
-using ShakeotDay.Models;
-using ShakeotDay.Services;
+using ShakeotDay.Web.Models;
+using ShakeotDay.Web.Services;
+using ShakeotDay.Web.Data;
 using ShakeotDay.Core.Models;
 using Newtonsoft.Json.Serialization;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace ShakeotDay
 {
@@ -62,6 +63,31 @@ namespace ShakeotDay
 
             services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
 
+            /*
+       * // Configure Identity
+        services.Configure<IdentityOptions>(options =>
+        {
+        // Password settings
+        options.Password.RequireDigit = true;
+        options.Password.RequiredLength = 8;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireUppercase = true;
+        options.Password.RequireLowercase = false;
+
+        // Lockout settings
+        options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
+        options.Lockout.MaxFailedAccessAttempts = 10;
+
+        // Cookie settings
+        options.Cookies.ApplicationCookie.ExpireTimeSpan = TimeSpan.FromDays(150);
+        options.Cookies.ApplicationCookie.LoginPath = "/Account/LogIn";
+        options.Cookies.ApplicationCookie.LogoutPath = "/Account/LogOff";
+
+        // User settings
+        options.User.RequireUniqueEmail = true;
+        });
+               * */
+
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
@@ -87,6 +113,8 @@ namespace ShakeotDay
             app.UseStaticFiles();
 
             app.UseIdentity();
+
+      
 
             // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
 

@@ -14,4 +14,18 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="TypeId" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="9292cb9b-6e56-4385-be45-3126bd4bd94d" ChangeDateTime="11/13/2016 05:45:30">
+    <Property Name="ElementName" Value="[dbo].[JwtRefresh].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[JwtRefresh]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="LookupValue" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="a5d4fb63-36f1-4535-956d-53df792f4a40" ChangeDateTime="11/13/2016 05:49:21">
+    <Property Name="ElementName" Value="[dbo].[JwtRefresh].[jwt]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[JwtRefresh]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="email" />
+  </Operation>
 </Operations>

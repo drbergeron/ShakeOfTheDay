@@ -8,9 +8,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
-using ShakeotDay.Models;
-using ShakeotDay.Models.AccountViewModels;
-using ShakeotDay.Services;
+using ShakeotDay.Web.Models;
+using ShakeotDay.Web.Models.AccountViewModels;
+using ShakeotDay.Web.Services;
 
 namespace ShakeotDay.Controllers
 {

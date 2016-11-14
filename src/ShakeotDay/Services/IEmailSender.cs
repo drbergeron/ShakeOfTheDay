@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ShakeotDay.Services
+namespace ShakeotDay.Web.Services
 {
     public interface IEmailSender
     {

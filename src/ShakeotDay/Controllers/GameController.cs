@@ -7,12 +7,14 @@ using Microsoft.AspNetCore.Mvc;
 using ShakeotDay.API.Controllers;
 using ShakeotDay.Core.Models;
 using Microsoft.Extensions.Options;
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace ShakeotDay.Controllers
 {
+    [Authorize]
     public class GameController : Controller
     {
+
         // GET: Game
         private IOptions<ConnectionStrings> _conn;
 

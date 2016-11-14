@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ShakeotDay.Models.AccountViewModels
+namespace ShakeotDay.Web.Models.AccountViewModels
 {
     public class LoginViewModel
     {

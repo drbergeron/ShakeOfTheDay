@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using ShakeotDay.Core.Models;
 using Microsoft.Extensions.Options;
 using ShakeotDay.Core.Repositories;
+using Microsoft.AspNetCore.Authorization;
+using Newtonsoft.Json;
 
 namespace ShakeotDay.API.Controllers
 {
@@ -13,10 +15,15 @@ namespace ShakeotDay.API.Controllers
     public class ValuesController : Controller
     {
         private readonly DiceRepository _repo;
+        private readonly JsonSerializerSettings _serializerSettings;
 
         public ValuesController(IOptions<ConnectionStrings> conn)
         {
             _repo = new DiceRepository(conn.Value.DefaultConnection);
+            _serializerSettings = new JsonSerializerSettings
+            {
+                Formatting = Formatting.Indented
+            };
         }
 
         // GET api/values
@@ -27,11 +34,20 @@ namespace ShakeotDay.API.Controllers
         }
 
         // GET api/values/5
+       
         [HttpGet("{id}")]
-        public string Get(int id)
+        [Authorize(Policy = "DisneyUser")]
+        public IActionResult Get(int id)
         {
-            return "value";
+            var response = new
+            {
+                made_it = "Welcome Mickey!"
+            };
+
+            var json = JsonConvert.SerializeObject(response, _serializerSettings);
+            return new OkObjectResult(json);
         }
+    
 
         
         // PUT api/values/5

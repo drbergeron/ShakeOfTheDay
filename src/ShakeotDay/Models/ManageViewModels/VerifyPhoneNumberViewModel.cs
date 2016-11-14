@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ShakeotDay.Models.ManageViewModels
+namespace ShakeotDay.Web.Models.ManageViewModels
 {
     public class VerifyPhoneNumberViewModel
     {
