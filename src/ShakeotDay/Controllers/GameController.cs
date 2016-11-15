@@ -37,8 +37,9 @@ namespace ShakeotDay.Controllers
         public ActionResult Details(long id)
         {
             var api = new API.Controllers.GameController(_conn);
-            api.GetSingleGame(id);
-            return View();
+            var respAct = api.GetSingleGame(id);
+            var resp = (ObjectResult)(respAct.GetType() == typeof(NoContentResult) ? new ObjectResult(new Game()) : respAct);
+            return View(resp.Value);
         }
 
         // GET: Game/Create

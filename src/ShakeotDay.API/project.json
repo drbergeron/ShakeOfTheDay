@@ -28,7 +28,8 @@
       "type": "build"
     },
     "OpenIddict.Core": "1.0.0-*",
-    "OpenIddict.EF": "1.0.0-*"
+    "OpenIddict.EF": "1.0.0-*",
+    "Microsoft.AspNetCore.Session": "1.0.0"
   },
 
   "tools": {

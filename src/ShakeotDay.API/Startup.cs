@@ -8,7 +8,7 @@ using ShakeotDay.Core.Models;
 using Microsoft.IdentityModel.Tokens;
 using ShakeotDay.API.Models;
 using System.Text;
-
+using Microsoft.AspNetCore.Http;
 
 namespace ShakeotDay.API
 {
@@ -40,6 +40,9 @@ namespace ShakeotDay.API
             // Add framework services.
             services.AddMvc();
 
+            services.AddDistributedMemoryCache(); // Adds a default in-memory implementation of IDistributedCache
+            services.AddSession();
+
             // Get options from app settings
             var jwtAppSettingOptions = Configuration.GetSection(nameof(JwtIssuerOptions));
 
@@ -59,6 +62,10 @@ namespace ShakeotDay.API
             });
 
             services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
+            services.Configure<HttpContext>(opt =>
+            {
+                opt.Session.SetString("init", "DiTest");
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -91,6 +98,8 @@ namespace ShakeotDay.API
                 AutomaticChallenge = true,
                 TokenValidationParameters = tokenValidationParameters
             });
+            // IMPORTANT: This session call MUST go before UseMvc()
+            app.UseSession();
 
             app.UseMvc();
         }

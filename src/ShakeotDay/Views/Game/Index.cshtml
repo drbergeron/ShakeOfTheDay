@@ -24,6 +24,7 @@
                 <td>@game.Year / @game.Day</td>
                 <td>@game.isWinningGame</td>
                 <td> <button type="button" class="btn btn-link" id="Game_@game.Id">Details</button></td>
+                <td><a asp-area="" asp-controller="Gamr" asp-action="Details" asp-route-id="@game.Id">Details</a></td>
             </tr>
 
         }

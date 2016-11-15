@@ -2,3 +2,17 @@
 @{
     ViewData["Title"] = "Game Details";
 }
+
+<div id="gamedetailswrapper">
+    <h3>Playing Games and viewing detailed results.</h3>
+    <table>
+        <tr>
+            <td>
+                @Model.Id
+            </td>
+            <td>@Model.isClosed</td>
+            <td>@Model.RollsTaken</td>
+            <td>@Model.isWinningGame</td>
+    </tr>
+    </table>
+</div>

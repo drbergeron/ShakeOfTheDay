@@ -10,6 +10,7 @@ using System.Security.Principal;
 using System.Threading.Tasks;
 using ShakeotDay.API.Models;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 
 namespace ShakeotDay.API.Controllers
 {
@@ -19,6 +20,7 @@ namespace ShakeotDay.API.Controllers
         private readonly JwtIssuerOptions _jwtOptions;
         private readonly ILogger _logger;
         private readonly JsonSerializerSettings _serializerSettings;
+        private HttpContext _context;
 
         public JwtController(IOptions<JwtIssuerOptions> jwtOptions, ILoggerFactory loggerFactory)
         {
@@ -33,6 +35,14 @@ namespace ShakeotDay.API.Controllers
             };
         }
 
+        [HttpGet("test")]
+        [AllowAnonymous]
+        public IActionResult TestContext()
+        {
+            var ctxt = HttpContext.Session.GetString("Auth") ?? "";
+            
+            return Ok(new { token = ctxt });
+        }
 
         [HttpPost]
         [AllowAnonymous]
@@ -74,6 +84,7 @@ namespace ShakeotDay.API.Controllers
             };
 
             var json = JsonConvert.SerializeObject(response, _serializerSettings);
+            HttpContext.Session.SetString("Auth", $"Bearer {encodedJwt}");
             return new OkObjectResult(json);
         }
 
