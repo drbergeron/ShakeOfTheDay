@@ -100,7 +100,7 @@ namespace ShakeotDay.API.Controllers
         }
 
         [HttpPut("{gameid}/Hand")]
-        public IActionResult GetGameHand(long gameid,[FromBody] DiceHand handIn)
+        public IActionResult GetGameHand(long gameid)
         {
             if (!ModelState.IsValid)
             {

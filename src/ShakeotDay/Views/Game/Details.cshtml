@@ -3,9 +3,22 @@
     ViewData["Title"] = "Game Details";
 }
 
+
+<nav>
+    <a asp-area="" asp-controller="Game" asp-action="Index" >&lt; &lt; Back</a>
+</nav>
+
+
 <div id="gamedetailswrapper">
     <h3>Playing Games and viewing detailed results.</h3>
-    <table>
+    <table class="game">
+        <tr>
+            <th>Id</th>
+            <th>Game Closed?</th>
+            <th>Rolls Taken</th>
+            <th>Win?</th>
+        </tr>
+
         <tr>
             <td>
                 @Model.Id
@@ -13,6 +26,22 @@
             <td>@Model.isClosed</td>
             <td>@Model.RollsTaken</td>
             <td>@Model.isWinningGame</td>
-    </tr>
+        </tr>
     </table>
+
+    <div class="playpanel">
+        @if (!Model.isClosed)
+        {
+            <div class="playarea">
+                <div class="dicearea">
+                    dice go here
+                </div>
+                <div class="diceControlArea">
+                    dice buttons go here
+                </div>
+            </div>
+        }
+
+    </div>
+
 </div>

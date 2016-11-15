@@ -11,7 +11,12 @@ namespace ShakeotDay.Core.Models
 
         public DiceHand()
         {
+            Random rnd = new Random();
             Hand = new List<Dice>(5);
+            for(int i = 0; i < 5; ++i)
+            {
+                Hand.Add(new Dice(rnd));
+            }
         }
 
         public DiceHand(List<Dice> diceIn)

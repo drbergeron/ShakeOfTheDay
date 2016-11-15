@@ -68,3 +68,38 @@ table.games{
 table.games th{
     width:33%;
 }
+
+table.game {
+    border-collapse:collapse;
+    table-layout:fixed;
+    width:100%;
+}
+
+table.game th{
+    width:33%;
+}
+
+.gamedetailswrapper{
+    border:solid black 1pt;
+    width:75%;
+}
+
+.playarea{
+    width:100%;
+    min-height:250px;
+    border: solid dashed 1pt;
+}
+
+.playarea .dicearea{
+    width:60%;
+    border:solid red 1pt;
+    float:left;
+    height:100%;
+}
+
+.playarea .diceControlArea{
+    float:right;
+    border: solid yellow 1pt;
+    width:39%;
+    height:100%;
+}

@@ -8,6 +8,7 @@ using ShakeotDay.API.Controllers;
 using ShakeotDay.Core.Models;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authorization;
+using ShakeotDay.ViewModels;
 
 namespace ShakeotDay.Controllers
 {
@@ -36,9 +37,15 @@ namespace ShakeotDay.Controllers
         // GET: Game/Details/5
         public ActionResult Details(long id)
         {
+
             var api = new API.Controllers.GameController(_conn);
             var respAct = api.GetSingleGame(id);
             var resp = (ObjectResult)(respAct.GetType() == typeof(NoContentResult) ? new ObjectResult(new Game()) : respAct);
+
+            var respHand = api.GetGameHand(id);
+            var hand = (ObjectResult)(respHand.GetType() == typeof(NoContentResult) ? new ObjectResult(new DiceHand()) : respHand);
+
+            var gameHand = new GameHand((Game)resp.Value, (DiceHand)hand.Value);
             return View(resp.Value);
         }
 
