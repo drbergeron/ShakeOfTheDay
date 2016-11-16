@@ -113,3 +113,7 @@ table.game th{
     margin:2pt 2pt 2pt 0pt;
     float:left;
 }
+
+.diehold{   
+    box-shadow: 3px 3px 1px #00820e;
+}

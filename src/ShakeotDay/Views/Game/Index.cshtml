@@ -26,12 +26,12 @@
                 <td><a asp-area="" asp-controller="Game" asp-action="Details" asp-route-id="@game.Id">Details</a></td>
             </tr>
         }
-
+      
     </table>
+    <script>
+            $(document).ready(function () {
+                $('#games').DataTable();
+            });
+    </script>
 </div>
 
-<script>
-    $(document).ready(function () {
-        $('#games').DataTable();
-    });
-</script>

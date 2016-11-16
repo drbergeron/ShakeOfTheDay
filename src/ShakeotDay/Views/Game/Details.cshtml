@@ -33,10 +33,11 @@
         @if (!Model.CurrentGame.isClosed)
         {
             <div class="playarea">
+                <div class="diceInstructions">Click to hold</div>
                 <div class="dicearea">
                     @foreach(var die in Model.CurrentHand.Hand)
                     {
-                        <div class="die"> @die.value / @(die.holding ? "H" : "") </div>
+                        <div class="die @(die.holding ? "diehold" : "")" data-held="@die.holding"> @die.value </div>
                     }
                 </div>
                 <div class="diceControlArea">
@@ -46,5 +47,20 @@
         }
 
     </div>
+    @section Scripts {
+        <script>
 
+            $(".die").click(function () {
+                //flip held value
+
+                console.log("current value: " + $(this).data("held"));
+                $(this).data('held', $(this).data("held") == "True" ? "False" : "True");
+                $(this).toggleClass('diehold');
+                console.log("new value: " + $(this).data("held"));
+            });
+        
+        </script>
+    }
+    
 </div>
+
