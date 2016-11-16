@@ -54,10 +54,8 @@ namespace ShakeotDay.Core.Repositories
 
             if(thisGame.RollsTaken < gType.RollsPerGame)
             {
-                //roll the dice
-
-                var dice = _diceRepo.GetNewDice(userId, gameId, diceQty).Result;
-                var updt = _gameRepo.UpdateGameRollsTaken(thisGame.Id, thisGame.RollsTaken++);
+                var dice = _diceRepo.GetNewDice(userId, gameId, (thisGame.RollsTaken +1), diceQty).Result;
+                var updt = _gameRepo.UpdateGameRollsTaken(thisGame.Id, (thisGame.RollsTaken + 1));
                 //TODO: check results of update, handle if error?
                 return dice;
             }
@@ -82,9 +80,12 @@ namespace ShakeotDay.Core.Repositories
         public async Task<DiceHand> RollHand(long userid, long gameid, DiceHand handIn)
         {
             var newHand = handIn;
-            var diceToRequest = await this.PerformRoll(userid, gameid, handIn.Hand.Count(x => !x.holding));
-            newHand.DiscardNonHeldDice();
-            newHand.AddDiceToHand(diceToRequest.ToList());
+            if (CanRoll(gameid))
+            {
+                var diceToRequest = await this.PerformRoll(userid, gameid, handIn.Hand.Count(x => !x.holding));
+                newHand.DiscardNonHeldDice();
+                newHand.AddDiceToHand(diceToRequest.ToList());
+            }
             return newHand;
         }
     }

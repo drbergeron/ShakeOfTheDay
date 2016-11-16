@@ -24,6 +24,7 @@ namespace ShakeotDay.Core.Models
     public enum ShakeError
     {
         Other = -1,
-        AlreadyPlayedToday        
+        AlreadyPlayedToday,
+        NoMoreRollsAllowed        
     }
 }

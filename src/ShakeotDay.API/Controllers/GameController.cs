@@ -110,16 +110,25 @@ namespace ShakeotDay.API.Controllers
             return Ok(_engine.GetHandFromGame(gameid).Result);
         }
 
-        [HttpPut("{gameid}/Roll")]
-        public IActionResult RollDice(long gameid, [FromBody] DiceHand handIn)
+        [HttpPut("{gameid}/Roll/{userId}")]
+        public IActionResult RollDice(long gameid, long userId, [FromBody] DiceHand handIn)
         {
             //get user id from login ?
             if (!ModelState.IsValid)
             {
                 throw new Exception("invalid model state");
             }
-            var userId = 1;
-            return Ok(_engine.RollHand(userId, gameid, handIn).Result);
+            //if(handIn.)
+
+            var newHand = _engine.RollHand(userId, gameid, handIn).Result;
+
+            //if the roll comes back as nothing
+            if(newHand.Hand.Count == 0)
+            {
+                return Ok(new ShakeException(ShakeError.NoMoreRollsAllowed, $"You are out of rolls for game {gameid}"));
+            }
+           
+            return Ok(newHand);
         }
     }
 }
