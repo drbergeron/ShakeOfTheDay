@@ -1,4 +1,4 @@
-﻿@model ShakeotDay.Core.Models.Game
+﻿@model ShakeotDay.ViewModels.GameHand
 @{
     ViewData["Title"] = "Game Details";
 }
@@ -18,23 +18,26 @@
             <th>Rolls Taken</th>
             <th>Win?</th>
         </tr>
-
+        
         <tr>
             <td>
-                @Model.Id
+                @Model.CurrentGame.Id
             </td>
-            <td>@Model.isClosed</td>
-            <td>@Model.RollsTaken</td>
-            <td>@Model.isWinningGame</td>
+            <td>@Model.CurrentGame.isClosed</td>
+            <td>@Model.CurrentGame.RollsTaken</td>
+            <td>@Model.CurrentGame.isWinningGame</td>
         </tr>
     </table>
 
     <div class="playpanel">
-        @if (!Model.isClosed)
+        @if (!Model.CurrentGame.isClosed)
         {
             <div class="playarea">
                 <div class="dicearea">
-                    dice go here
+                    @foreach(var die in Model.CurrentHand.Hand)
+                    {
+                        <div class="die"> @die.value / @(die.holding ? "H" : "") </div>
+                    }
                 </div>
                 <div class="diceControlArea">
                     dice buttons go here

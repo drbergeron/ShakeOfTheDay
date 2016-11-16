@@ -15,7 +15,7 @@ namespace ShakeotDay.Core.Models
        public Dice()
         {
             roll = new Random();
-            value = 0;
+            value = roll.Next(1, 6); 
         }
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace ShakeotDay.Core.Models
         public Dice(Random rnd)
         {
             roll = rnd;
-            value = 0;
+            value = roll.Next(1, 6); 
         }
 
         public int value { get { return _value; } private set { _value = value; } }

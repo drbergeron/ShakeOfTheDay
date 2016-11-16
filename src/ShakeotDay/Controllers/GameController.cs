@@ -46,7 +46,7 @@ namespace ShakeotDay.Controllers
             var hand = (ObjectResult)(respHand.GetType() == typeof(NoContentResult) ? new ObjectResult(new DiceHand()) : respHand);
 
             var gameHand = new GameHand((Game)resp.Value, (DiceHand)hand.Value);
-            return View(resp.Value);
+            return View(gameHand);
         }
 
         // GET: Game/Create

@@ -41,12 +41,12 @@ namespace ShakeotDay.Core.Repositories
         {
             var sql =
                 @"
-                    select max(GameRollNumber)
-                    from DiceRoll
+                    select COALESCE(max(GameRollNumber),0)
+                    from DieRolls
                     where GameID = @GameId
                 ";
 
-            return await _conn.QueryFirstAsync<int>(sql, new { GameId = gameId });
+            return await _conn.QueryFirstOrDefaultAsync<int>(sql, new { GameId = gameId });
         }
 
         public async Task<int> SaveRoll(Dice dieIn, long userIn, long gameIn, int rollNumber)
@@ -69,7 +69,15 @@ namespace ShakeotDay.Core.Repositories
 
         public async Task<DiceHand> GetHandForGame(long gameId, int rollToGet)
         {
-            var sql = @"select RollValue from DiceRoll where GameId = @Gameid and GameRollNumber = @Roll";
+            if(rollToGet == 0)
+            {
+                Random rnd = new Random();
+                var dicehand = new DiceHand();
+                dicehand.Fill(rnd);
+                return dicehand;
+            }
+
+            var sql = @"select RollValue from DieRolls where GameId = @Gameid and GameRollNumber = @Roll";
 
             var diceEnum = await _conn.QueryAsync<Dice>(sql, new { Gameid = gameId, Roll = rollToGet });
             var dice = diceEnum.ToList();

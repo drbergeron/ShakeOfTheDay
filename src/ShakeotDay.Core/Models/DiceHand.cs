@@ -62,5 +62,14 @@ namespace ShakeotDay.Core.Models
         {
             Hand = new List<Dice>(5);
         }
+
+        public void Fill(Random rndIn)
+        {
+            if(Hand.Count != 5)
+                for(int i = 0; i < 5 - Hand.Count; ++i)
+                {
+                    Hand.Add(new Dice(rndIn));
+                }
+        }
     }
 }
