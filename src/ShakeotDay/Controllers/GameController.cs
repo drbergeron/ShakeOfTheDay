@@ -46,6 +46,7 @@ namespace ShakeotDay.Controllers
             var friendlyID = user?.FriendlyUserId;
 
             ViewData["UserId"] = friendlyID ?? -1;
+            ViewData["access_token"] = "";
 
             var api = new API.Controllers.GameController(_conn);
             var respAct = api.GetSingleGame(id);
