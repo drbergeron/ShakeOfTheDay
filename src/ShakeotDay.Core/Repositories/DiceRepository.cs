@@ -49,6 +49,14 @@ namespace ShakeotDay.Core.Repositories
             return await _conn.QueryFirstOrDefaultAsync<int>(sql, new { GameId = gameId });
         }
 
+        public async void SaveHand(DiceHand handIn, long userIn, long gameIn, int rollNumber)
+        {
+            foreach(var die in handIn.Hand)
+            {
+                var savetask = await this.SaveRoll(die, userIn, gameIn, rollNumber);
+            }
+        }
+
         public async Task<int> SaveRoll(Dice dieIn, long userIn, long gameIn, int rollNumber)
         {
             var dr = new 
@@ -77,7 +85,7 @@ namespace ShakeotDay.Core.Repositories
                 return dicehand;
             }
 
-            var sql = @"select RollValue from DieRolls where GameId = @Gameid and GameRollNumber = @Roll";
+            var sql = @"select RollValue [value], 0 [holding] from DieRolls where GameId = @Gameid and GameRollNumber = @Roll";
 
             var diceEnum = await _conn.QueryAsync<Dice>(sql, new { Gameid = gameId, Roll = rollToGet });
             var dice = diceEnum.ToList();

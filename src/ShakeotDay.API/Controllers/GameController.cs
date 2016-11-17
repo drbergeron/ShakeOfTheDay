@@ -16,13 +16,15 @@ namespace ShakeotDay.API.Controllers
     [Route("api/[controller]")]
     public class GameController : Controller
     {
-        private GameRepository _repo;
+        private GameRepository _gameRepo;
         private GameEngineRepository _engine;
+        private DiceRepository _diceRepo;
 
         public GameController(IOptions<ConnectionStrings> connIn)
         {
-            _repo = new GameRepository(connIn.Value.DefaultConnection);
+            _gameRepo = new GameRepository(connIn.Value.DefaultConnection);
             _engine = new GameEngineRepository(connIn.Value.DefaultConnection);
+            _diceRepo = new DiceRepository(connIn.Value.DefaultConnection);
         }
 
         [HttpGet("test")]
@@ -35,7 +37,7 @@ namespace ShakeotDay.API.Controllers
         [HttpGet("default/{id}")]
         public IActionResult GetDefaultGames(long id)
         {
-            var getGamesTask = _repo.GetManyGames(id);
+            var getGamesTask = _gameRepo.GetManyGames(id);
             var Games = getGamesTask.Result;
             if (Games.Count() == 0)
                 return NoContent();
@@ -47,7 +49,7 @@ namespace ShakeotDay.API.Controllers
         [HttpGet("{id}")]
         public IActionResult GetSingleGame(long id)
         {
-            var getgameTask = _repo.GetGameById(id);
+            var getgameTask = _gameRepo.GetGameById(id);
             getgameTask.Wait();
             var gameObj = getgameTask.Result;
 
@@ -59,16 +61,16 @@ namespace ShakeotDay.API.Controllers
         public IActionResult CreateNewGame(long UserId, GameTypeEnum GameType)
         {
 
-            var cntTask = _repo.UserGamesPlayedToday(UserId);
+            var cntTask = _gameRepo.UserGamesPlayedToday(UserId);
             var cnt = cntTask.Result;
             if (cnt != 0) return new BadRequestObjectResult(new ShakeException(ShakeError.AlreadyPlayedToday, "You have already played a game today."));
 
 
-            var gameTask = _repo.NewGame(UserId, GameType);
+            var gameTask = _gameRepo.NewGame(UserId, GameType);
             gameTask.Wait();
             var gameId = gameTask.Result.Single();
 
-            var getgameTask = _repo.GetGameById(gameId);
+            var getgameTask = _gameRepo.GetGameById(gameId);
             getgameTask.Wait();
             var gameObj = getgameTask.Result;
 
@@ -90,7 +92,7 @@ namespace ShakeotDay.API.Controllers
                 return BadRequest(ModelState);
             try
             {
-                var res = _repo.CloseGame(id, result.winType);
+                var res = _gameRepo.CloseGame(id, result.winType);
                 return Ok(res);
             }
             catch (Exception e)
@@ -120,7 +122,7 @@ namespace ShakeotDay.API.Controllers
             }
             //if(handIn.)
 
-            var newHand = _engine.RollHand(userId, gameid, handIn).Result;
+            var newHand = _engine.PerformRoll(userId, gameid, handIn).Result;
 
             //if the roll comes back as nothing
             if(newHand.Hand.Count == 0)

@@ -53,9 +53,12 @@ namespace ShakeotDay.Core.Models
             Hand.AddRange(diceIn);
         }
 
-        public void DiscardNonHeldDice()
+        public void RollNonHeldDice()
         {
-            Hand.RemoveAll(x => !x.holding);
+            Hand.ForEach(delegate(Dice d)
+            {
+                if (!d.holding) d.Roll();
+            });
         }
 
         public void ClearHand()
@@ -68,7 +71,7 @@ namespace ShakeotDay.Core.Models
             if(Hand.Count != 5)
                 for(int i = 0; i < 5 - Hand.Count; ++i)
                 {
-                    Hand.Add(new Dice(rndIn));
+                    Hand.Add(new Dice(rndIn.Next(1,6)));
                 }
         }
     }

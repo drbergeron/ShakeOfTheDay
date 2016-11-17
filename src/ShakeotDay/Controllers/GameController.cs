@@ -9,6 +9,8 @@ using ShakeotDay.Core.Models;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authorization;
 using ShakeotDay.ViewModels;
+using ShakeotDay.Web.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace ShakeotDay.Controllers
 {
@@ -18,10 +20,13 @@ namespace ShakeotDay.Controllers
 
         // GET: Game
         private IOptions<ConnectionStrings> _conn;
+        // Stores UserManager
+        private readonly UserManager<ApplicationUser> _manager;
 
-        public GameController(IOptions<ConnectionStrings> optIn)
+        public GameController(IOptions<ConnectionStrings> optIn, UserManager<ApplicationUser> manager)
         {
             _conn = optIn;
+            _manager = manager;
         }
         
         public IActionResult Index()
@@ -37,6 +42,10 @@ namespace ShakeotDay.Controllers
         // GET: Game/Details/5
         public ActionResult Details(long id)
         {
+            var user = _manager.GetUserAsync(HttpContext.User).Result;
+            var friendlyID = user?.FriendlyUserId;
+
+            ViewData["UserId"] = friendlyID ?? -1;
 
             var api = new API.Controllers.GameController(_conn);
             var respAct = api.GetSingleGame(id);
@@ -48,7 +57,7 @@ namespace ShakeotDay.Controllers
             var gameHand = new GameHand((Game)resp.Value, (DiceHand)hand.Value);
             return View(gameHand);
         }
-
+  
         // GET: Game/Create
         public ActionResult Create()
         {

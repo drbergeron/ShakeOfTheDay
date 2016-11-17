@@ -15,7 +15,7 @@ namespace ShakeotDay.Core.Models
        public Dice()
         {
             roll = new Random();
-            value = roll.Next(1, 6); 
+            value = roll.Next(1, 7); 
         }
 
         /// <summary>
@@ -27,7 +27,16 @@ namespace ShakeotDay.Core.Models
         public Dice(Random rnd)
         {
             roll = rnd;
-            value = roll.Next(1, 6); 
+            value = roll.Next(1, 7); 
+        }
+        /// <summary>
+        /// Use an external RNG to pass in a rnd.Next() value to set as initial value
+        /// </summary>
+        /// <param name="valIn"></param>
+        public Dice(int valIn)
+        {
+            roll = new Random();
+            value = valIn;
         }
 
         public int value { get { return _value; } private set { _value = value; } }

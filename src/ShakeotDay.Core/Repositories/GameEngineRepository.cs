@@ -47,20 +47,21 @@ namespace ShakeotDay.Core.Repositories
         /// <param name="gameId"></param>
         /// <param name="diceQty"></param>
         /// <returns></returns>
-        private async Task<IEnumerable<Dice>> PerformRoll(long userId, long gameId, int diceQty)
+        public async Task<DiceHand> PerformRoll(long userId, long gameId, DiceHand handIn)
         {
             var thisGame = await _gameRepo.GetGameById(gameId);
             var gType = await _gameRepo.GetGameType(thisGame.TypeId);
 
             if(thisGame.RollsTaken < gType.RollsPerGame)
             {
-                var dice = _diceRepo.GetNewDice(userId, gameId, (thisGame.RollsTaken +1), diceQty).Result;
+                handIn.RollNonHeldDice();
                 var updt = _gameRepo.UpdateGameRollsTaken(thisGame.Id, (thisGame.RollsTaken + 1));
+                _diceRepo.SaveHand(handIn, userId, gameId, (thisGame.RollsTaken + 1));
                 //TODO: check results of update, handle if error?
-                return dice;
+                return handIn;
             }
             else
-                return new List<Dice>();
+                return new DiceHand();
         }
 
         /// <summary>
@@ -75,18 +76,6 @@ namespace ShakeotDay.Core.Repositories
             var hand = await _diceRepo.GetHandForGame(gameId, roll);
 
             return hand;
-        }
-
-        public async Task<DiceHand> RollHand(long userid, long gameid, DiceHand handIn)
-        {
-            var newHand = handIn;
-            if (CanRoll(gameid))
-            {
-                var diceToRequest = await this.PerformRoll(userid, gameid, handIn.Hand.Count(x => !x.holding));
-                newHand.DiscardNonHeldDice();
-                newHand.AddDiceToHand(diceToRequest.ToList());
-            }
-            return newHand;
         }
     }
 }

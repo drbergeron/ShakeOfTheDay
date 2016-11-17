@@ -14,24 +14,28 @@
                 <th>Game ID</th>
                 <td>Date Played</td>
                 <td>Result</td>
+                <td></td>
             </tr>
         </thead>
-        @foreach(var game in Model)
-        {
-            
-            <tr data-gameid="@game.Id">
-                <td>@game.Id</td>
-                <td>@game.Year / @game.Day</td>
-                <td>@game.isWinningGame</td>
-                <td><a asp-area="" asp-controller="Game" asp-action="Details" asp-route-id="@game.Id">Details</a></td>
-            </tr>
-        }
-      
+        <tbody>
+            @foreach (var game in Model)
+            {
+
+                <tr data-gameid="@game.Id">
+                    <td>@game.Id</td>
+                    <td>@game.Year / @game.Day</td>
+                    <td>@game.isWinningGame</td>
+                    <td><a asp-area="" asp-controller="Game" asp-action="Details" asp-route-id="@game.Id">Details</a></td>
+                </tr>
+            }
+        </tbody>
     </table>
+    @section Scripts{
+    <script src="@Url.Content("//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js")" type="text/javascript"></script>
     <script>
-            $(document).ready(function () {
-                $('#games').DataTable();
-            });
+        $('#games').DataTable();
     </script>
+    }
+   
 </div>
 
