@@ -11,7 +11,7 @@ namespace ShakeotDay.Core.Models
 
         public DiceHand()
         {
-            
+            Hand = new List<Dice>(5);
         }
 
         public DiceHand(List<Dice> diceIn)
@@ -50,10 +50,13 @@ namespace ShakeotDay.Core.Models
 
         public void RollNonHeldDice()
         {
-            Hand.ForEach(delegate(Dice d)
+            foreach(var d in Hand)
             {
-                if (!d.holding) d.Roll();
-            });
+                if (!d.holding)
+                {
+                    d.Roll();
+                }
+            }
         }
 
         public void ClearHand()
@@ -63,11 +66,14 @@ namespace ShakeotDay.Core.Models
 
         public void Fill(Random rndIn)
         {
-            if(Hand.Count != 5)
-                for(int i = 0; i < 5 - Hand.Count; ++i)
+            if (Hand.Count != 5)
+            {
+                var initCount = Hand.Count;
+                for (int i = 0; i < 5 - initCount; ++i)
                 {
-                    Hand.Add(new Dice(rndIn.Next(1,6)));
+                    Hand.Add(new Dice(rndIn.Next(1, 7)));
                 }
+            }
         }
     }
 }

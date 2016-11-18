@@ -113,7 +113,7 @@ namespace ShakeotDay.API.Controllers
         }
 
         [HttpPost("{gameid}/Roll/{userId}")]
-        public IActionResult RollDice(long gameid, long userId, [FromBody] DiceHand handIn)
+        public IActionResult RollDice(long gameid, long userId, [FromBody]DiceHand handIn)
         {
             //get user id from login ?
             if (!ModelState.IsValid || handIn.Hand.Count != 5)

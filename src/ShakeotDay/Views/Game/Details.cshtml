@@ -33,11 +33,11 @@
         @if (!Model.CurrentGame.isClosed)
         {
             <div class="playarea">
-                <div class="diceInstructions">Click to hold</div>
+                <div class="diceInstructions" id="message"></div>
                 <div class="dicearea">
                     @foreach(var die in Model.CurrentHand.Hand.Select((game,i) => new { i, game }))
                     {
-                        <div class="die @(die.game.holding ? "diehold" : "")" data-held="@die.game.holding" data-handpos="@die.i"> @die.game.value </div>
+                        <div class="die @(die.game.holding ? "diehold" : "")" data-held="@die.game.holding" data-handpos="@die.i"> @die.game.diceValue </div>
                     }
                 </div>
                 <div class="diceControlArea">
@@ -55,11 +55,12 @@
             var thisHandModel = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.CurrentHand));           
 
             $(".die").click(function () {
-                //flip held value
-                $(this).toggleClass('diehold');
-                thisHandModel.Hand[parseInt($(this).data("handpos"))].holding = $(this).data("held") == "true" ? "false" : "true";
-                $(this).data("held", ($(this).data("held") === "true" ? "false" : "true"))
-                logHand(thisHandModel);
+                if(@Model.CurrentGame.RollsTaken != 0){//flip held value
+                    $(this).toggleClass('diehold');
+                    thisHandModel.Hand[parseInt($(this).data("handpos"))].holding = $(this).data("held") == "true" ? "false" : "true";
+                    $(this).data("held", ($(this).data("held") === "true" ? "false" : "true"))
+                    logHand(thisHandModel);
+                }
             });
         
             function clearDie() {
@@ -72,23 +73,36 @@
 
             var newHand = null;
             $('#roll_button').click(function(){
-                var gamehand = {
-                    
                 
-                }
+                var postdata = JSON.stringify(thisHandModel);
+                console.log("postdata:" + postdata);
+
                 var newHand = $.ajax({
                     url: "@Url.Content($"~/api/Game/{Model.CurrentGame.Id}/roll/{ViewData["UserId"]}")",
-                    data : thisHandModel,
+                    data : postdata,
+                    contentType:"application/json; charset=utf-8",
                     success: function( data) {
                         newHand = data;                    
                     },  
-                    type: "post",
+                    type: "POST",
                     error: function(jqx, stat, err){
                         console.log("jq: " + jqx + "stat: " + stat + " err:" + err);                    
-                    },
-                    contentType:"application/json"
+                    }                    
                 });
+                console.log("resp obj: ");
                 logHand(newHand);
+            });
+
+            $('#message').text( function(){
+                var closed = @Model.CurrentGame.isClosed.ToString().ToLower();
+                var rolls = @Model.CurrentGame.RollsTaken;
+
+                if(closed == true){
+                    return "No more rolls available.";
+                }else if(rolls == 0){
+                    return "Click Roll to Begin";
+                }else
+                    return "Click Dice to hold, then roll again."
             });
         </script>
     }

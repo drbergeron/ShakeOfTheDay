@@ -62,7 +62,7 @@ namespace ShakeotDay.Core.Repositories
             var dr = new 
             {
                 UserId = userIn,
-                RollValue = dieIn.value,
+                RollValue = dieIn.diceValue,
                 GameId = gameIn,
                 RollNum = rollNumber
             };

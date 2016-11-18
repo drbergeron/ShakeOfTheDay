@@ -10,12 +10,11 @@ namespace ShakeotDay.Core.Models
         private int _value;
 
         /// <summary>
-        /// Can be used to create dice one off, should not be used inside of a loop due to random Seed issues.
+        /// used by the model binder to create a dice
         /// </summary>
        public Dice()
         {
             roll = new Random();
-            value = roll.Next(1, 7); 
         }
 
         /// <summary>
@@ -27,7 +26,7 @@ namespace ShakeotDay.Core.Models
         public Dice(Random rnd)
         {
             roll = rnd;
-            value = roll.Next(1, 7); 
+            diceValue = roll.Next(1, 7); 
         }
         /// <summary>
         /// Use an external RNG to pass in a rnd.Next() value to set as initial value
@@ -36,15 +35,15 @@ namespace ShakeotDay.Core.Models
         public Dice(int valIn)
         {
             roll = new Random();
-            value = valIn;
+            diceValue = valIn;
         }
 
-        public int value { get { return _value; } private set { _value = value; } }
+        public int diceValue { get; set; }
         public bool holding { get; set; }
 
         public int Roll()
         {
-            _value = roll.Next(1, 6);
+            _value = roll.Next(1, 7);
             return _value;
         }
     }
