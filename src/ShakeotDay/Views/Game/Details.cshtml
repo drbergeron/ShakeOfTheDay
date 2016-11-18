@@ -37,7 +37,7 @@
                 <div class="dicearea">
                     @foreach(var die in Model.CurrentHand.Hand.Select((game,i) => new { i, game }))
                     {
-                        <div class="die @(die.game.holding ? "diehold" : "")" data-held="@die.game.holding" data-handpos="@die.i"> @die.game.diceValue </div>
+                        <div class="die @(die.game.holding ? "diehold" : "")" data-held="@die.game.holding" data-handpos="@die.i"> @die.game.dieValue </div>
                     }
                 </div>
                 <div class="diceControlArea">
@@ -77,12 +77,17 @@
                 var postdata = JSON.stringify(thisHandModel);
                 console.log("postdata:" + postdata);
 
-                var newHand = $.ajax({
+                var newHand = null;
+                $.ajax({
                     url: "@Url.Content($"~/api/Game/{Model.CurrentGame.Id}/roll/{ViewData["UserId"]}")",
                     data : postdata,
                     contentType:"application/json; charset=utf-8",
-                    success: function( data) {
-                        newHand = data;                    
+                    success: function( data ) {
+                        
+                       $('.dicearea div').each(function(){
+                           $(this).text(data[parseInt($(this).data("handpos"))].dieValue);
+                           $(this).data("hold",data[parseInt($(this).data("handpos"))].holding);
+                        });
                     },  
                     type: "POST",
                     error: function(jqx, stat, err){
@@ -104,6 +109,12 @@
                 }else
                     return "Click Dice to hold, then roll again."
             });
+
+            function updateDiceUI( data ){
+                
+                
+            }
+
         </script>
     }
     

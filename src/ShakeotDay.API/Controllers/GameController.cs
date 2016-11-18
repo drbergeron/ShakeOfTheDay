@@ -27,12 +27,6 @@ namespace ShakeotDay.API.Controllers
             _diceRepo = new DiceRepository(connIn.Value.DefaultConnection);
         }
 
-        [HttpGet("test")]
-        public IActionResult Test()
-        {
-            return Ok(new { Test = "test" });
-        }
-
         // GET: api/values
         [HttpGet("default/{id}")]
         public IActionResult GetDefaultGames(long id)

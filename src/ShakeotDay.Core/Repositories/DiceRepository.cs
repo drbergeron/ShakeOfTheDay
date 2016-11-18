@@ -62,7 +62,7 @@ namespace ShakeotDay.Core.Repositories
             var dr = new 
             {
                 UserId = userIn,
-                RollValue = dieIn.diceValue,
+                RollValue = dieIn.dieValue,
                 GameId = gameIn,
                 RollNum = rollNumber
             };
@@ -85,7 +85,7 @@ namespace ShakeotDay.Core.Repositories
                 return dicehand;
             }
 
-            var sql = @"select RollValue [value], 0 [holding] from DieRolls where GameId = @Gameid and GameRollNumber = @Roll";
+            var sql = @"select RollValue [dieValue], 0 [holding] from DieRolls where GameId = @Gameid and GameRollNumber = @Roll";
 
             var diceEnum = await _conn.QueryAsync<Dice>(sql, new { Gameid = gameId, Roll = rollToGet });
             var dice = diceEnum.ToList();

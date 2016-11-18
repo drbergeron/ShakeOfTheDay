@@ -1,20 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ShakeotDay.Core.Models
 {
     public class Dice 
     {
         private Random roll;
-        private int _value;
-
+ 
         /// <summary>
         /// used by the model binder to create a dice
         /// </summary>
        public Dice()
         {
-            roll = new Random();
+            roll = new Random((int)DateTime.Now.Ticks);
+            Task.Delay(20).Wait();
         }
 
         /// <summary>
@@ -26,7 +28,7 @@ namespace ShakeotDay.Core.Models
         public Dice(Random rnd)
         {
             roll = rnd;
-            diceValue = roll.Next(1, 7); 
+            dieValue = roll.Next(1, 7); 
         }
         /// <summary>
         /// Use an external RNG to pass in a rnd.Next() value to set as initial value
@@ -35,16 +37,17 @@ namespace ShakeotDay.Core.Models
         public Dice(int valIn)
         {
             roll = new Random();
-            diceValue = valIn;
+            Task.Delay(20).Wait();
+            dieValue = valIn;
         }
 
-        public int diceValue { get; set; }
+        public int dieValue { get; set; }
         public bool holding { get; set; }
 
         public int Roll()
         {
-            _value = roll.Next(1, 7);
-            return _value;
+            dieValue = roll.Next(1, 7);
+            return dieValue;
         }
     }
 }
