@@ -86,6 +86,7 @@ namespace ShakeotDay.API.Controllers
                 return BadRequest(ModelState);
             try
             {
+                //figure out if a winning hand here, then pass into closegame
                 var res = _gameRepo.CloseGame(id, result.winType);
                 return Ok(res);
             }
@@ -123,7 +124,15 @@ namespace ShakeotDay.API.Controllers
             {
                 return Ok(new ShakeException(ShakeError.NoMoreRollsAllowed, $"You are out of rolls for game {gameid}"));
             }
-           
+
+            //TODO: move this into it's own route??
+            var type = _gameRepo.GetGameType(GameTypeEnum.ShakeOfTheDay).Result;
+            if(newHand.RollNumber == type.RollsPerGame)
+            {
+                
+                var t = _gameRepo.CloseGame(gameid, GameWinType.three).Result;
+            }
+
             return Ok(newHand);
         }
     }

@@ -20,6 +20,8 @@ namespace ShakeotDay.Core.Models
         }
 
         public List<Dice> Hand { get; set; }
+        //used when coming back from ajax call
+        public int? RollNumber { get; set; }
 
         /// <summary>
         /// Used to set the dice in the hand being held from roll to roll

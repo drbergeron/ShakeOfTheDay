@@ -23,9 +23,9 @@
             <td>
                 @Model.CurrentGame.Id
             </td>
-            <td>@Model.CurrentGame.isClosed</td>
-            <td>@Model.CurrentGame.RollsTaken</td>
-            <td>@Model.CurrentGame.isWinningGame</td>
+            <td id="isClosed">@Model.CurrentGame.isClosed</td>
+            <td id="rollsTaken">@Model.CurrentGame.RollsTaken</td>
+            <td id="isWinning">@Model.CurrentGame.isWinningGame</td>
         </tr>
     </table>
 
@@ -55,7 +55,7 @@
             var thisHandModel = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.CurrentHand));           
 
             $(".die").click(function () {
-                if(@Model.CurrentGame.RollsTaken != 0){//flip held value
+                if(thisHandModel.rollNumber != 0){//flip held value
                     $(this).toggleClass('diehold');
                     thisHandModel.Hand[parseInt($(this).data("handpos"))].holding = $(this).data("held") == "true" ? "false" : "true";
                     $(this).data("held", ($(this).data("held") === "true" ? "false" : "true"))
@@ -82,12 +82,21 @@
                     url: "@Url.Content($"~/api/Game/{Model.CurrentGame.Id}/roll/{ViewData["UserId"]}")",
                     data : postdata,
                     contentType:"application/json; charset=utf-8",
-                    success: function( data ) {
-                        
-                       $('.dicearea div').each(function(){
-                           $(this).text(data[parseInt($(this).data("handpos"))].dieValue);
-                           $(this).data("hold",data[parseInt($(this).data("handpos"))].holding);
-                        });
+                    success: function( dataIn ) {
+
+                        if(dataIn.errorNumber && dataIn.errorNumber != 0){
+                            alert("Error: " + dataIn.errorType + "\n" + dataIn.errorMessage);
+                        }
+                        else{
+                            console.log(dataIn);
+                            $('.dicearea div').each(function(){
+                                $(this).text(dataIn.hand[parseInt($(this).data("handpos"))].dieValue);
+                                $(this).data("hold",dataIn.hand[parseInt($(this).data("handpos"))].holding);
+                            });
+
+                            $('#rollsTaken').text( dataIn.rollNumber);
+                            thisHandModel = dataIn;
+                        }
                     },  
                     type: "POST",
                     error: function(jqx, stat, err){

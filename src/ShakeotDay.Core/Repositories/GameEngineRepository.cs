@@ -58,6 +58,7 @@ namespace ShakeotDay.Core.Repositories
                 var updt = _gameRepo.UpdateGameRollsTaken(thisGame.Id, (thisGame.RollsTaken + 1));
                 _diceRepo.SaveHand(handIn, userId, gameId, (thisGame.RollsTaken + 1));
                 //TODO: check results of update, handle if error?
+                handIn.RollNumber = (thisGame.RollsTaken + 1);
                 return handIn;
             }
             else
