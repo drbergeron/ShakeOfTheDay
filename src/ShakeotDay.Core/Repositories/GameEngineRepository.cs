@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ShakeotDay.Core.Models;
 using ShakeotDay.Core.Repositories;
+using MoreLinq;
 
 namespace ShakeotDay.Core.Repositories
 {
@@ -59,6 +60,13 @@ namespace ShakeotDay.Core.Repositories
                 _diceRepo.SaveHand(handIn, userId, gameId, (thisGame.RollsTaken + 1));
                 //TODO: check results of update, handle if error?
                 handIn.RollNumber = (thisGame.RollsTaken + 1);
+
+                //if this roll is the last one, eval the game hand
+                if((thisGame.RollsTaken + 1) == gType.RollsPerGame)
+                {
+
+                }
+
                 return handIn;
             }
             else
@@ -78,5 +86,19 @@ namespace ShakeotDay.Core.Repositories
 
             return hand;
         }
+
+        public async Task<GameWinType> EvaulateGame(long userId, long gameId, DiceHand handIn)
+        {
+            var dice = handIn.Hand;
+
+            var pairs = dice.GroupBy(d => d.dieValue).Select(dg => new { dieNum = dg.Key, cnt = dg.Count() });
+            var sorted = pairs.OrderBy(x => x.cnt).ThenBy(x => x.dieNum);
+            var bestHand = sorted.First();
+
+            var sumNonRolls = dice.Where(x => x.dieValue != bestHand.dieNum).Sum(x => x.dieValue);
+
+            return GameWinType.three;
+        }
+
     }
 }

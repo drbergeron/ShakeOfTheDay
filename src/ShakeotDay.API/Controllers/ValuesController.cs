@@ -15,11 +15,13 @@ namespace ShakeotDay.API.Controllers
     public class ValuesController : Controller
     {
         private readonly DiceRepository _repo;
+        private readonly GameEngineRepository _engine;
         private readonly JsonSerializerSettings _serializerSettings;
 
         public ValuesController(IOptions<ConnectionStrings> conn)
         {
             _repo = new DiceRepository(conn.Value.DefaultConnection);
+            _engine = new GameEngineRepository(conn.Value.DefaultConnection);
             _serializerSettings = new JsonSerializerSettings
             {
                 Formatting = Formatting.Indented
@@ -28,9 +30,17 @@ namespace ShakeotDay.API.Controllers
 
         // GET api/values
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IActionResult Get()
         {
-            return new string[] { "value1", "value2" };
+            var testHand = new DiceHand(new List<Dice>()
+            {
+                new Dice(1),
+                new Dice(1),
+                new Dice(2),
+                new Dice(2),
+                new Dice(2)
+            });
+            return Ok(_engine.EvaulateGame(1, 6, testHand).Result);
         }
 
         // GET api/values/5
