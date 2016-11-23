@@ -75,6 +75,7 @@
     <Build Include="Tables\Game\GameTypes.sql" />
     <Build Include="Tables\Game\Games.sql" />
     <Build Include="Tables\Game\UserGameWallet.sql" />
+    <Build Include="Tables\Game\ShakeValues.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment1.sql" />

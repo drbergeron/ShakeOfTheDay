@@ -19,12 +19,14 @@ namespace ShakeotDay.API.Controllers
         private GameRepository _gameRepo;
         private GameEngineRepository _engine;
         private DiceRepository _diceRepo;
+        private ShakeValueRepository _shake;
 
         public GameController(IOptions<ConnectionStrings> connIn)
         {
             _gameRepo = new GameRepository(connIn.Value.DefaultConnection);
             _engine = new GameEngineRepository(connIn.Value.DefaultConnection);
             _diceRepo = new DiceRepository(connIn.Value.DefaultConnection);
+            _shake = new ShakeValueRepository(connIn.Value.DefaultConnection);
         }
 
         // GET: api/values
@@ -134,6 +136,25 @@ namespace ShakeotDay.API.Controllers
             }
 
             return Ok(newHand);
+        }
+
+        [HttpGet("ShakeOfTheDay/{view:int?}")]
+        public IActionResult GetShakeValue(int? view = 0)
+        {
+            //view 0 = today
+            //view 1 = tomorrow
+            int val = -1;
+            if (view == 0)
+            {
+                val = _shake.GetShakeOfDay(DateTime.Now.Year, DateTime.Now.DayOfYear).Result;
+            }else
+            {
+                var tomorrow = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+                tomorrow = tomorrow.AddDays(1);
+                val = _shake.GetShakeOfDay(tomorrow.Year, tomorrow.DayOfYear).Result;
+            }
+
+            return Ok(val);
         }
     }
 }

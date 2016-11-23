@@ -15,12 +15,14 @@ namespace ShakeotDay.Core.Repositories
         private SqlConnection _conn;
         private GameRepository _gameRepo;
         private DiceRepository _diceRepo;
+        private ShakeValueRepository _shake;
 
         public GameEngineRepository(string connStr)
         {
             _conn = new SqlConnection(connStr);
             _gameRepo = new GameRepository(connStr);
             _diceRepo = new DiceRepository(connStr);
+            _shake = new ShakeValueRepository(connStr);
         }
 
         /// <summary>
@@ -87,18 +89,16 @@ namespace ShakeotDay.Core.Repositories
             return hand;
         }
 
-        public async Task<GameWinType> EvaulateGame(long userId, long gameId, DiceHand handIn)
+        public async Task<GameWinType> EvaluateGame(long userId, long gameId, DiceHand handIn)
         {
             var dice = handIn.Hand;
+            var shakevalue = await _shake.GetShakeOfDay(DateTime.Now.Year, DateTime.Now.DayOfYear);
 
-            var pairs = dice.GroupBy(d => d.dieValue).Select(dg => new { dieNum = dg.Key, cnt = dg.Count() });
-            var sorted = pairs.OrderBy(x => x.cnt).ThenBy(x => x.dieNum);
-            var bestHand = sorted.First();
-
-            var sumNonRolls = dice.Where(x => x.dieValue != bestHand.dieNum).Sum(x => x.dieValue);
+            var pairs = dice.Count(x => x.dieValue == shakevalue);
+          
+            var sumNonRolls = dice.Where(x => x.dieValue != shakevalue).Sum(x => x.dieValue);
 
             return GameWinType.three;
         }
-
     }
 }
