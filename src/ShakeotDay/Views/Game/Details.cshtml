@@ -30,8 +30,7 @@
     </table>
 
     <div class="playpanel">
-        @if (!Model.CurrentGame.isClosed)
-        {
+        
             <div class="playarea">
                 <div class="diceInstructions" id="message"></div>
                 <div class="dicearea">
@@ -46,7 +45,7 @@
                     user @ViewData["UserId"]
                 </div>
             </div>
-        }
+       
 
     </div>
     @section Scripts {
@@ -55,11 +54,12 @@
             var thisHandModel = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.CurrentHand));           
 
             $(".die").click(function () {
-                if(thisHandModel.rollNumber != 0){//flip held value
+                if(thisHandModel.rollNumber != 0 && !@(Model.CurrentGame.isClosed.ToString().ToLower()) ){//flip held value
+                    logHand(thisHandModel);
                     $(this).toggleClass('diehold');
                     thisHandModel.Hand[parseInt($(this).data("handpos"))].holding = $(this).data("held") == "true" ? "false" : "true";
                     $(this).data("held", ($(this).data("held") === "true" ? "false" : "true"))
-                    logHand(thisHandModel);
+                    
                 }
             });
         
@@ -96,6 +96,7 @@
 
                             $('#rollsTaken').text( dataIn.rollNumber);
                             thisHandModel = dataIn;
+                            logHand(thisHandModel);
                         }
                     },  
                     type: "POST",
@@ -103,8 +104,6 @@
                         console.log("jq: " + jqx + "stat: " + stat + " err:" + err);                    
                     }                    
                 });
-                console.log("resp obj: ");
-                logHand(newHand);
             });
 
             $('#message').text( function(){

@@ -12,6 +12,7 @@ namespace ShakeotDay.Core.Models
 
     public enum GameWinType
     {
+        loss = -1,
         three=1, //start @ 1 so losing games are 0
         four,
         five

@@ -9,6 +9,8 @@ namespace ShakeotDay.Core.Models
     {
         private ShakeError _err;
 
+        public ShakeException() { }
+
         public ShakeException(ShakeError errIn, string DescIn)
         {
             _err = errIn;
@@ -16,7 +18,7 @@ namespace ShakeotDay.Core.Models
         }
 
        public string ErrorType { get { return  _err.ToString(); } }
-       public int ErrorNumber { get { return (int)_err; }  }
+       public int ErrorNumber { get { return (int)_err; } }
         
         public string ErrorMessage { get; set; }
     }

@@ -52,7 +52,7 @@ textarea {
 .gamesIndexWrapper{
     width:75%;
     float: left;
-    border: solid black 1pt;
+   
 }
 
 footer{
@@ -116,4 +116,8 @@ table.game th{
 
 .diehold{   
     box-shadow: 3px 3px 1px #00820e;
+}
+
+.newGameArea{
+    margin: 5pt 0pt 10pt 0pt;
 }

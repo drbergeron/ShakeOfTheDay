@@ -29,13 +29,22 @@ namespace ShakeotDay.Controllers
             _manager = manager;
         }
         
-        public IActionResult Index()
+        public IActionResult Index(bool error, ShakeException ex)
         {
+            if(error)
+            {
+                ViewData["Error"] = true;
+                ViewData["Type"] = ex.ErrorType;
+                ViewData["errorMsg"] = ex.ErrorMessage;
+                ViewData["errorNo"] = ex.ErrorNumber;
+            }
+
             long id = 1;
             var con = new API.Controllers.GameController(_conn);
             var respAct = con.GetDefaultGames(id);
             //if the response was noContent (no games), then create an empty ObjectResult, else cast returned fame as ObjectResult
             var resp = (ObjectResult)(respAct.GetType() == typeof(NoContentResult) ? new ObjectResult(new List<Game>()) : respAct);
+
             return View(resp.Value);
         }
         
@@ -62,7 +71,20 @@ namespace ShakeotDay.Controllers
         // GET: Game/Create
         public ActionResult Create()
         {
-            return View();
+            var user = _manager.GetUserAsync(HttpContext.User).Result;
+            var friendlyID = user?.FriendlyUserId ?? -1;
+
+            var api = new API.Controllers.GameController(_conn);
+            var respAct = api.CreateNewGame(friendlyID, GameTypeEnum.ShakeOfTheDay);
+
+            var resp = (ObjectResult)(respAct.GetType() == typeof(NoContentResult) ? new ObjectResult(new Game()) : respAct);
+
+            if(resp.StatusCode == 400)
+            {
+                return RedirectToAction("Index", new { error = true, ex = (ShakeException)resp.Value });
+            }
+            else
+                return RedirectToAction("Index", new { error = false});
         }
 
         // POST: Game/Create

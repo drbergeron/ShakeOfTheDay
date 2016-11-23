@@ -131,7 +131,8 @@ namespace ShakeotDay.API.Controllers
             var type = _gameRepo.GetGameType(GameTypeEnum.ShakeOfTheDay).Result;
             if(newHand.RollNumber == type.RollsPerGame)
             {
-                
+              
+                var wintype = _engine.EvaluateGame(handIn);
                 var t = _gameRepo.CloseGame(gameid, GameWinType.three).Result;
             }
 

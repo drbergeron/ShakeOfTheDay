@@ -63,12 +63,6 @@ namespace ShakeotDay.Core.Repositories
                 //TODO: check results of update, handle if error?
                 handIn.RollNumber = (thisGame.RollsTaken + 1);
 
-                //if this roll is the last one, eval the game hand
-                if((thisGame.RollsTaken + 1) == gType.RollsPerGame)
-                {
-
-                }
-
                 return handIn;
             }
             else
@@ -89,16 +83,28 @@ namespace ShakeotDay.Core.Repositories
             return hand;
         }
 
-        public async Task<GameWinType> EvaluateGame(long userId, long gameId, DiceHand handIn)
+        public async Task<GameWinType> EvaluateGame(DiceHand handIn)
         {
             var dice = handIn.Hand;
             var shakevalue = await _shake.GetShakeOfDay(DateTime.Now.Year, DateTime.Now.DayOfYear);
 
             var pairs = dice.Count(x => x.dieValue == shakevalue);
           
+            //future use?
             var sumNonRolls = dice.Where(x => x.dieValue != shakevalue).Sum(x => x.dieValue);
 
-            return GameWinType.three;
+            switch (pairs)
+            {
+                case 3:
+                    return GameWinType.three;
+                case 4:
+                    return GameWinType.four;
+                case 5:
+                    return GameWinType.five;
+                default:
+                    return GameWinType.loss;
+            }
+            
         }
     }
 }
