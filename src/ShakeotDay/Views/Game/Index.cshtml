@@ -13,11 +13,10 @@
         <a asp-controller="Game" asp-action="Create">Create New Game</a>
     </div>
 
-    @if ((bool)ViewData["Error"] == true)
+    @if ((bool)ViewData?["Error"] == true)
     {
         <div class="message">
-            <span>@ViewData["errorMsg"]</span><br/>
-            <span>@ViewData["errorNo"]</span>
+            <span>You have Already Started a game today.</span>
         </div>
     }
    

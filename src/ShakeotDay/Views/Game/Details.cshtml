@@ -53,8 +53,10 @@
 
             var thisHandModel = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.CurrentHand));           
 
+            var closed = @Model.CurrentGame.isClosed.ToString().ToLower();
+
             $(".die").click(function () {
-                if(thisHandModel.rollNumber != 0 && !@(Model.CurrentGame.isClosed.ToString().ToLower()) ){//flip held value
+                if(thisHandModel.RollNumber != 0 && !closed ){//flip held value
                     logHand(thisHandModel);
                     $(this).toggleClass('diehold');
                     thisHandModel.Hand[parseInt($(this).data("handpos"))].holding = $(this).data("held") == "true" ? "false" : "true";
@@ -95,6 +97,9 @@
                             });
 
                             $('#rollsTaken').text( dataIn.rollNumber);
+                            if(dataIn.rollNumber === 3){
+                                $('#isClosed').text = "Closed";
+                            }
                             thisHandModel = dataIn;
                             logHand(thisHandModel);
                         }

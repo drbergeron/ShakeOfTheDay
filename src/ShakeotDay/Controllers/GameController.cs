@@ -31,13 +31,12 @@ namespace ShakeotDay.Controllers
         
         public IActionResult Index(bool error, ShakeException ex)
         {
-            if(error)
-            {
-                ViewData["Error"] = true;
-                ViewData["Type"] = ex.ErrorType;
-                ViewData["errorMsg"] = ex.ErrorMessage;
-                ViewData["errorNo"] = ex.ErrorNumber;
-            }
+            
+            ViewData["Error"] = error ? true : false; 
+            ViewData["Type"] = ex?.ErrorType ?? "";
+            ViewData["errorMsg"] = ex?.ErrorMessage ?? "";
+            ViewData["errorNo"] = ex?.ErrorNumber ?? -1;
+            
 
             long id = 1;
             var con = new API.Controllers.GameController(_conn);
@@ -81,7 +80,8 @@ namespace ShakeotDay.Controllers
 
             if(resp.StatusCode == 400)
             {
-                return RedirectToAction("Index", new { error = true, ex = (ShakeException)resp.Value });
+                var err = (ShakeException)resp.Value;
+                return RedirectToAction("Index", new { error = true, ex = err });
             }
             else
                 return RedirectToAction("Index", new { error = false});

@@ -82,6 +82,7 @@ namespace ShakeotDay.Core.Repositories
                 Random rnd = new Random();
                 var dicehand = new DiceHand();
                 dicehand.Fill(rnd);
+                dicehand.RollNumber = 0;
                 return dicehand;
             }
 
