@@ -8,12 +8,14 @@ namespace ShakeotDay.ViewModels
 {
     public class GameHand
     {
-        public GameHand(Game gameIn, DiceHand handIn)
+        public GameHand(Game gameIn, DiceHand handIn, int ShakeIn)
         {
             CurrentGame = gameIn;
             CurrentHand = handIn;
+            ShakeOfTheDay = ShakeIn;
         }
         public Game CurrentGame {get;set;}
         public DiceHand CurrentHand { get; set; }
+        public int ShakeOfTheDay { get; set; }
     }
 }

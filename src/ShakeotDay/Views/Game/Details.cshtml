@@ -1,4 +1,7 @@
 ﻿@model ShakeotDay.ViewModels.GameHand
+@using Newtonsoft.Json
+@using Newtonsoft.Json.Serialization
+
 @{
     ViewData["Title"] = "Game Details";
 }
@@ -10,27 +13,40 @@
 
 
 <div id="gamedetailswrapper">
-    <h3>Playing Games and viewing detailed results.</h3>
+    <h3>Game @Model.CurrentGame.Id</h3>
     <table class="game">
         <tr>
-            <th>Id</th>
+            <th>Date Played</th>
             <th>Game Closed?</th>
             <th>Rolls Taken</th>
             <th>Win?</th>
         </tr>
         
         <tr>
-            <td>
-                @Model.CurrentGame.Id
-            </td>
+            <td id="datePlayed"> </td>
             <td id="isClosed">@Model.CurrentGame.isClosed</td>
             <td id="rollsTaken">@Model.CurrentGame.RollsTaken</td>
             <td id="isWinning">@Model.CurrentGame.isWinningGame</td>
         </tr>
     </table>
 
+    <div class="shakevalue">
+       This Game's Shake to get is:<br />
+        <span style="display:block;width:100%;text-align:center;font-size:20pt;">@Model.ShakeOfTheDay</span>
+
+        <div class="diceControlArea">
+            <button class="btn btn-primary btn-block @(Model.CurrentGame.isClosed ? "disabled" : "active") "
+                    id="roll_button" data-gameNo="@Model.CurrentGame.Id">
+                Roll
+            </button>
+            
+        </div>
+    </div>
+
+    
+
     <div class="playpanel">
-        
+   
             <div class="playarea">
                 <div class="diceInstructions" id="message"></div>
                 <div class="dicearea">
@@ -39,27 +55,22 @@
                         <div class="die @(die.game.holding ? "diehold" : "")" data-held="@die.game.holding" data-handpos="@die.i"> @die.game.dieValue </div>
                     }
                 </div>
-                <div class="diceControlArea">
-                    <button class="btn btn-primary btn-block @(Model.CurrentGame.isClosed ? "disabled" : "active") " 
-                            id="roll_button" data-gameNo="@Model.CurrentGame.Id" > Roll </button>
-                    user @ViewData["UserId"]
-                </div>
+               
             </div>
-       
-
     </div>
     @section Scripts {
         <script>
 
-            var thisHandModel = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.CurrentHand));           
+            var thisHandModel = @Html.Raw(JsonConvert.SerializeObject(Model.CurrentHand, Formatting.Indented, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }));           
 
-            var closed = @Model.CurrentGame.isClosed.ToString().ToLower();
-
+            var gameisclosed = @Model.CurrentGame.isClosed.ToString().ToLower();
+             
             $(".die").click(function () {
-                if(thisHandModel.RollNumber != 0 && !closed ){//flip held value
+                 
+                if(thisHandModel.rollNumber != 0 && !gameisclosed ){//flip held value
                     logHand(thisHandModel);
                     $(this).toggleClass('diehold');
-                    thisHandModel.Hand[parseInt($(this).data("handpos"))].holding = $(this).data("held") == "true" ? "false" : "true";
+                    thisHandModel.hand[parseInt($(this).data("handpos"))].holding = $(this).data("held") == "true" ? "false" : "true";
                     $(this).data("held", ($(this).data("held") === "true" ? "false" : "true"))
                     
                 }
@@ -98,7 +109,8 @@
 
                             $('#rollsTaken').text( dataIn.rollNumber);
                             if(dataIn.rollNumber === 3){
-                                $('#isClosed').text = "Closed";
+                                $('#isClosed').text("Closed");
+                                gameisclosed = true;
                             }
                             thisHandModel = dataIn;
                             logHand(thisHandModel);
@@ -123,13 +135,13 @@
                     return "Click Dice to hold, then roll again."
             });
 
-            function updateDiceUI( data ){
-                
-                
-            }
+            $('#datePlayed').text(createDate(@Model.CurrentGame.Year, @Model.CurrentGame.Day));
 
         </script>
     }
     
+</div>
+<div style="width:100%;clear:both">
+    &nbsp;
 </div>
 

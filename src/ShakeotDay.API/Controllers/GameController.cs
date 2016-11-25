@@ -140,7 +140,7 @@ namespace ShakeotDay.API.Controllers
         }
 
         [HttpGet("ShakeOfTheDay/{view:int?}")]
-        public IActionResult GetShakeValue(int? view = 0)
+        public IActionResult GetTodayShakeValue(int? view = 0)
         {
             //view 0 = today
             //view 1 = tomorrow
@@ -155,6 +155,17 @@ namespace ShakeotDay.API.Controllers
                 val = _shake.GetShakeOfDay(tomorrow.Year, tomorrow.DayOfYear).Result;
             }
 
+            return Ok(val);
+        }
+
+        [HttpGet("ShakeOfTheDay/{year:int}/{day:int}")]
+        public IActionResult GetSpecificShakeValue(int year, int day)
+        {
+            //view 0 = today
+            //view 1 = tomorrow
+            int val = -1;
+            val = _shake.GetShakeOfDay(year, day).Result;
+           
             return Ok(val);
         }
     }

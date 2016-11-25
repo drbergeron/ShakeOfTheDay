@@ -36,7 +36,7 @@
 
                 <tr data-gameid="@game.Id">
                     <td>@game.Id</td>
-                    <td>@game.Year / @game.Day</td>
+                    <td class="date" data-year="@game.Year" data-day="@game.Day"></td>
                     <td>@game.isWinningGame</td>
                     <td><a asp-area="" asp-controller="Game" asp-action="Details" asp-route-id="@game.Id">Details</a></td>
                 </tr>
@@ -49,6 +49,13 @@
         $('#games').DataTable({
             "order": [[1, "desc"]]
         });
+        
+        $('.date').each(function () {
+            console.log($(this).data("year"));
+            console.log($(this).data("day"));
+            $(this).text(createDate($(this).data("year"), $(this).data("day")));
+        });
+
     </script>
     }
    

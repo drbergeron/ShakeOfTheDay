@@ -19,16 +19,16 @@ namespace ShakeotDay.Core.Repositories
             _conn = new SqlConnection(_connstr);
         }
         
-        public async Task<int> GetShakeOfDay(int Year, int Day)
+        public async Task<int> GetShakeOfDay(int Year, int Day, bool reprocess = false)
         {
             var sql = "select ShakeOfTheDay from ShakeValues where Year=@Year and Day=@Day";
 
             var val = await _conn.QueryFirstOrDefaultAsync<int?>(sql, new { Year = Year, Day = Day });
 
-            if (val == null)
+            if (val == null && !reprocess)
             {
                 this.GenerateShakeValues();
-                return await GetShakeOfDay(Year, Day);
+                return await GetShakeOfDay(Year, Day, true);
             }
             else
                 return val ?? -1;

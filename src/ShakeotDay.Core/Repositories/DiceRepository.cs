@@ -95,7 +95,7 @@ namespace ShakeotDay.Core.Repositories
                 throw new Exception($"Wrong Number of dice returned from game {gameId} and roll {rollToGet}; expected 5, got {dice.Count}");
             }else
             {
-                return new DiceHand(dice);
+                return new DiceHand(dice, rollToGet);
             }
         }
     }

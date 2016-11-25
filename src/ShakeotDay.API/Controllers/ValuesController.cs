@@ -39,7 +39,7 @@ namespace ShakeotDay.API.Controllers
                 new Dice(2),
                 new Dice(2),
                 new Dice(2)
-            });
+            }, 3);
             return Ok(_engine.EvaluateGame(testHand).Result);
         }
 

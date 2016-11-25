@@ -57,13 +57,20 @@ namespace ShakeotDay.Controllers
             ViewData["access_token"] = "";
 
             var api = new API.Controllers.GameController(_conn);
-            var respAct = api.GetSingleGame(id);
-            var resp = (ObjectResult)(respAct.GetType() == typeof(NoContentResult) ? new ObjectResult(new Game()) : respAct);
+
+            var respGame = api.GetSingleGame(id);
+            var gameOr = (ObjectResult)(respGame.GetType() == typeof(NoContentResult) ? new ObjectResult(new Game()) : respGame);
 
             var respHand = api.GetGameHand(id);
             var hand = (ObjectResult)(respHand.GetType() == typeof(NoContentResult) ? new ObjectResult(new DiceHand()) : respHand);
 
-            var gameHand = new GameHand((Game)resp.Value, (DiceHand)hand.Value);
+            var game = (Game)gameOr.Value;
+
+            //get today's value
+            var shakeValueResp = api.GetSpecificShakeValue(game.Year, game.Day);
+            var shakeValue = (ObjectResult)(shakeValueResp.GetType() == typeof(NoContentResult) ? new ObjectResult(-1) : shakeValueResp);
+
+            var gameHand = new GameHand(game, (DiceHand)hand.Value, (int)shakeValue.Value);
             return View(gameHand);
         }
   

@@ -14,9 +14,10 @@ namespace ShakeotDay.Core.Models
             Hand = new List<Dice>(5);
         }
 
-        public DiceHand(List<Dice> diceIn)
+        public DiceHand(List<Dice> diceIn, int roll)
         {
             Hand = diceIn;
+            RollNumber = roll;
         }
 
         public List<Dice> Hand { get; set; }
