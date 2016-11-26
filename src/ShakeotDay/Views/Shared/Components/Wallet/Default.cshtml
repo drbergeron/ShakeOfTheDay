@@ -1,0 +1,10 @@
+﻿@model ShakeotDay.ViewModels.WalletsViewModel
+
+@if (Model != null)
+{
+    <ul class="nav navbar-nav" style="margin-left:10%;color: #AAAAAA;" id="walletAmt">
+        <li style="margin-right: 2%;">  Wallet: @Model.UserWallet.WalletValue</li>
+        <li>Jackpot: @Model.JackpotWallet.WalletValue </li>
+    </ul>
+
+}

@@ -20,6 +20,7 @@ namespace ShakeotDay.API.Controllers
         private GameEngineRepository _engine;
         private DiceRepository _diceRepo;
         private ShakeValueRepository _shake;
+        private WalletRepository _wallets;
 
         public GameController(IOptions<ConnectionStrings> connIn)
         {
@@ -27,6 +28,7 @@ namespace ShakeotDay.API.Controllers
             _engine = new GameEngineRepository(connIn.Value.DefaultConnection);
             _diceRepo = new DiceRepository(connIn.Value.DefaultConnection);
             _shake = new ShakeValueRepository(connIn.Value.DefaultConnection);
+            _wallets = new WalletRepository(connIn.Value.DefaultConnection);
         }
 
         // GET: api/values
@@ -65,6 +67,10 @@ namespace ShakeotDay.API.Controllers
             var gameTask = _gameRepo.NewGame(UserId, GameType);
             gameTask.Wait();
             var gameId = gameTask.Result.Single();
+
+            var success = _wallets.SubtractABuck(UserId).Result;
+            if (!success)
+                return new NoContentResult();
 
             var getgameTask = _gameRepo.GetGameById(gameId);
             getgameTask.Wait();
@@ -134,6 +140,11 @@ namespace ShakeotDay.API.Controllers
               
                 var wintype = _engine.EvaluateGame(handIn).Result;
                 var t = _gameRepo.CloseGame(gameid, wintype).Result;
+
+                if(wintype != GameWinType.loss)
+                {
+
+                }
             }
 
             return Ok(newHand);
@@ -167,6 +178,14 @@ namespace ShakeotDay.API.Controllers
             val = _shake.GetShakeOfDay(year, day).Result;
            
             return Ok(val);
+        }
+
+        [HttpGet("Wallets/{user}")]
+        public IActionResult GetWallet(long user)
+        {
+            var wal = _wallets.GetOrCreateWallet(user).Result;
+
+            return Ok(wal);
         }
     }
 }

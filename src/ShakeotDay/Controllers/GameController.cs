@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using ShakeotDay.ViewModels;
 using ShakeotDay.Web.Models;
 using Microsoft.AspNetCore.Identity;
+using ShakeotDay.Core.Repositories;
 
 namespace ShakeotDay.Controllers
 {

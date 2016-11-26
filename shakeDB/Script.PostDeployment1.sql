@@ -11,3 +11,6 @@ Post-Deployment Script Template
 */
 insert into GameTypes(Id,Name,RollsPerGame,MaxPlaysPerDay)
 Values(0,'Shake of The Day Classic',3,1)
+
+insert into Wallets(UserId, WalletValue)
+values(-1,250)
