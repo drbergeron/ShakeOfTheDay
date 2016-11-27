@@ -104,7 +104,7 @@ namespace ShakeotDay.API.Controllers
             }
         }
 
-        [HttpPut("{gameid}/Hand")]
+        [HttpGet("{gameid}/Hand")]
         public IActionResult GetGameHand(long gameid)
         {
             if (!ModelState.IsValid)
@@ -143,7 +143,21 @@ namespace ShakeotDay.API.Controllers
 
                 if(wintype != GameWinType.loss)
                 {
-
+                    bool result;
+                    switch (wintype)
+                    {
+                        case GameWinType.three:
+                            result = _wallets.TransferAmountFromJackpot(userId, 1).Result;
+                            break;
+                        case GameWinType.four:
+                            result = _wallets.TransferAmountFromJackpot(userId, 5).Result;
+                            break;
+                        case GameWinType.five:
+                            result = _wallets.TransferJackpot(userId).Result;
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
 

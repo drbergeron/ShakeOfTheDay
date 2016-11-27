@@ -123,11 +123,13 @@ namespace ShakeotDay.Core.Repositories
         {
             var oldWallet = await GetOrCreateWallet(userId);
             var jackpot = await GetJackpotWallet();
-            var newValue = oldWallet.WalletValue + jackpot.WalletValue;
+            var newValue = oldWallet.WalletValue + amount;
+            var newJackpotValue = jackpot.WalletValue - amount;
 
+            var jackSuccess = await SetWalletValue((int)Jackpot.Wallet, newJackpotValue);
             var success = await SetWalletValue(userId, newValue);
 
-            return success;
+            return success && jackSuccess;
         }
     }
 }

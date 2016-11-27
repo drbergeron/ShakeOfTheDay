@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ShakeotDay.Web.Models;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ShakeotDay.Web.Data
 {
@@ -18,6 +19,7 @@ namespace ShakeotDay.Web.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            builder.Entity(typeof(ApplicationUser)).Property<long?>("FriendlyUserId").UseSqlServerIdentityColumn();
             // Customize the ASP.NET Identity model and override the defaults if needed.
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);

@@ -37,11 +37,13 @@ namespace ShakeotDay.Controllers
             ViewData["Type"] = ex?.ErrorType ?? "";
             ViewData["errorMsg"] = ex?.ErrorMessage ?? "";
             ViewData["errorNo"] = ex?.ErrorNumber ?? -1;
-            
 
-            long id = 1;
+
+            var user = _manager.GetUserAsync(HttpContext.User).Result;
+            var friendlyID = user?.FriendlyUserId ?? -1;
+
             var con = new API.Controllers.GameController(_conn);
-            var respAct = con.GetDefaultGames(id);
+            var respAct = con.GetDefaultGames(friendlyID);
             //if the response was noContent (no games), then create an empty ObjectResult, else cast returned fame as ObjectResult
             var resp = (ObjectResult)(respAct.GetType() == typeof(NoContentResult) ? new ObjectResult(new List<Game>()) : respAct);
 
