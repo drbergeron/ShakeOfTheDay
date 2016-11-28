@@ -15,9 +15,6 @@ namespace ShakeotDay.API
     public class Startup
     {
 
-        private const string SecretKey = "needtogetthisfromenvironment";
-        private readonly SymmetricSecurityKey _signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(SecretKey));
-
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -44,28 +41,27 @@ namespace ShakeotDay.API
             services.AddSession();
 
             // Get options from app settings
-            var jwtAppSettingOptions = Configuration.GetSection(nameof(JwtIssuerOptions));
+            //var jwtAppSettingOptions = Configuration.GetSection(nameof(JwtIssuerOptions));
 
             // Configure JwtIssuerOptions
+            /*
             services.Configure<JwtIssuerOptions>(options =>
             {
                 options.Issuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)];
                 options.Audience = jwtAppSettingOptions[nameof(JwtIssuerOptions.Audience)];
                 options.SigningCredentials = new SigningCredentials(_signingKey, SecurityAlgorithms.HmacSha256);
             });
-
+            */
             // Use policy auth.
+            /*
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("DisneyUser",
                                   policy => policy.RequireClaim("DisneyCharacter", "IAmMickey"));
             });
-
+            */
             services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
-            services.Configure<HttpContext>(opt =>
-            {
-                opt.Session.SetString("init", "DiTest");
-                });
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -73,7 +69,7 @@ namespace ShakeotDay.API
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-
+            /*
             var jwtAppSettingOptions = Configuration.GetSection(nameof(JwtIssuerOptions));
             var tokenValidationParameters = new TokenValidationParameters
             {
@@ -98,6 +94,7 @@ namespace ShakeotDay.API
                 AutomaticChallenge = true,
                 TokenValidationParameters = tokenValidationParameters
             });
+            */
             // IMPORTANT: This session call MUST go before UseMvc()
             app.UseSession();
 

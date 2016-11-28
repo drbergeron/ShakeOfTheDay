@@ -156,7 +156,7 @@
                         thisGameModel = gameUpdate;
                         updateGameLabels(thisGameModel);
 
-                        if(thisGameMode.isClosed)
+                        if(thisGameModel.isClosed)
                             $('roll_button').addClass("disabled");
                     },
                     error: function(){
